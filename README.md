@@ -38,7 +38,7 @@ Metamodel mapping implemented adheres to the to the SysML v1.5 specification whi
 To build the plugin along with the plugin installer
 
 * Add registry key
-  * See step 2 in [Create your first EA Add-in]([https://sparxsystems.us/go/enterprise-architect-cloud/?keyword=%2Bsparx%20%2Benterprise%20%2Barchitect&creative=498008725817&gclid=CjwKCAiAp8iMBhAqEiwAJb94z-PmUa41-smzhAaqj634_Tt1h6UZBraN4dHq_1yjsy-FZh98_RWlPhoCreEQAvD_BwE](https://bellekens.com/2011/01/29/tutorial-create-your-first-c-enterprise-architect-add-in-in-10-minutes/))
+  * See step 2 in [Create your first EA Add-in](https://sparxsystems.us/go/enterprise-architect-cloud/?keyword=%2Bsparx%20%2Benterprise%20%2Barchitect&creative=498008725817&gclid=CjwKCAiAp8iMBhAqEiwAJb94z-PmUa41-smzhAaqj634_Tt1h6UZBraN4dHq_1yjsy-FZh98_RWlPhoCreEQAvD_BwE](https://bellekens.com/2011/01/29/tutorial-create-your-first-c-enterprise-architect-add-in-in-10-minutes/))
 * Open the project in Visual Studio
 * Right click on the project and select the “Build” option
   * Note: MTIP Installer version in MTIPInstaller project properties must be updated for each installer build. Installer .msi and .exe will be built in &lt;MTIP Solution Directory&gt;\MTIPInstaller\Debug
