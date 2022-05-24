@@ -18,17 +18,17 @@ namespace MTIP.Constants
     public class SequenceConstants
     {
         public string collaboration;
-        public string interactionFragment;
-        public string sequence;
         public string interaction;
+        public string interactionFragment;
         public string interactionState;
+        public string sequence;
         public SequenceConstants()
         {
             collaboration = "Collaboration";
-            interactionFragment = "InteractionFragment";
-            sequence = "Sequence";
             interaction = "Interaction";
+            interactionFragment = "InteractionFragment";
             interactionState = "InteractionState";
+            sequence = "Sequence";
         }
     }
 }

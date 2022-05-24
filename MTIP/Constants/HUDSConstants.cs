@@ -17,46 +17,46 @@ namespace MTIP.Constants
 {
     public class HUDSConstants
     {
-        public string type;
-        public string id;
         public string attributes;
-        public string relationships;
-        public string relationshipMetadata;
-        public string dtype;
-        public string str;
-        public string dict;
-        public string ea;
-        public string name;
-        public string status;
-        public string key;
         public string data;
-        public string typedBy;
-        public string isComposite;
-        public string list;
+        public string dict;
+        public string dtype;
+        public string ea;
         public string element;
-        public string value;
+        public string id;
         public string intType;
+        public string isComposite;
+        public string key;
+        public string list;
+        public string name;
+        public string relationshipMetadata;
+        public string relationships;
+        public string status;
+        public string str;
+        public string type;
+        public string typedBy;
+        public string value;
         public HUDSConstants()
         {
-            type = "type";
-            id = "id";
             attributes = "attributes";
-            relationships = "relationships";
-            relationshipMetadata = "relationship_metadata";
-            dtype = "_dtype";
-            str = "str";
-            dict = "dict";
-            ea = "ea";
-            name = "name";
-            status = "status";
-            key = "key";
             data = "data";
-            typedBy = "typedBy";
-            isComposite = "isComposite";
-            list = "list";
+            dict = "dict";
+            dtype = "_dtype";
+            ea = "ea";
             element = "element";
-            value = "value";
+            id = "id";
             intType = "int";
+            isComposite = "isComposite";
+            key = "key";
+            list = "list";
+            name = "name";
+            relationshipMetadata = "relationship_metadata";
+            relationships = "relationships";
+            status = "status";
+            str = "str";
+            type = "type";
+            typedBy = "typedBy";
+            value = "value";
         }
     }
 }

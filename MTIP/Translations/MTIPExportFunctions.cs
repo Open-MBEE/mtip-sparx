@@ -36,6 +36,7 @@ namespace MTIP.Translations
         public BlockConstants blockConstants;
         public StereotypeConstants stereotypeConstants;
         public ModelConstants modelConstants;
+        public Dictionary<string, string> customProfiles;
 
         public MTIPExportFunctions(MTIP plugin)
         {
@@ -50,9 +51,11 @@ namespace MTIP.Translations
             blockConstants = new BlockConstants();
             stereotypeConstants = new StereotypeConstants();
             modelConstants = new ModelConstants();
+            customProfiles = new Dictionary<string, string>();
         }
         public void ExportToMTIPXML()
         {
+            GetCustomProfiles();
             //Create XML document that will be exported
             XmlDocument xmlDocument = new XmlDocument();
             xmlDocument.LoadXml("<packet></packet>");
@@ -72,9 +75,16 @@ namespace MTIP.Translations
             };
 
             //Remove illegal characters
-            string correctedXmlString = Regex.Replace(xmlDocument.InnerXml, @"[\u0000-\u0008,\u000B,\u000C,\u000E-\u001F]", "");
+            string correctedXmlString = xmlDocument.InnerXml;
             correctedXmlString = Regex.Replace(correctedXmlString, "&#xB;", "");
             correctedXmlString = Regex.Replace(correctedXmlString, "&amp;", "and");
+            correctedXmlString = Regex.Replace(correctedXmlString, "-&gt;", "to");
+            correctedXmlString = Regex.Replace(correctedXmlString, "&#x1D;", "");
+            correctedXmlString = Regex.Replace(correctedXmlString, "&gt;", "greater than");
+            correctedXmlString = Regex.Replace(correctedXmlString, "&lt;", "less than");
+            //correctedXmlString = Regex.Replace(correctedXmlString, "&lt;", "(");
+            //correctedXmlString = Regex.Replace(correctedXmlString, "&lt;", ")");
+            correctedXmlString = Regex.Replace(correctedXmlString, @"[\u0000-\u0008,\u000B,\u000C,\u000E-\u001F]", "");
             xmlDocument.LoadXml(correctedXmlString);
 
             settings.Indent = true;
@@ -83,6 +93,23 @@ namespace MTIP.Translations
             xmlDocument.Save(xmlWriter);
 
             xmlWriter.Close();
+
+            customProfiles.Clear();
+
+            //Create XML error log for exported model
+            XmlDocument exportDocument = new XmlDocument();
+            exportDocument.LoadXml("<exportLog></exportLog>");
+
+            foreach (string logLine in exportLog)
+            {
+                XmlElement logElement = exportDocument.CreateElement("log");
+                logElement.InnerText = logLine;
+                exportDocument.DocumentElement.AppendChild(logElement);
+            }
+            string exportedLname = Path.Combine(outputDirectory, selectedPackage.Name + "_log.xml");
+            XmlWriter xmlEWriter = XmlWriter.Create(exportedLname, settings);
+            exportDocument.Save(xmlEWriter);
+            xmlEWriter.Close();
 
             MessageBox.Show("XML Export is Complete");
 
@@ -140,7 +167,13 @@ namespace MTIP.Translations
                     stereotypeAttribute.AppendChild(stereotypeNameAttribute);
                     attributesElement.AppendChild(stereotypeAttribute);
                 }
-                if (package.Notes != "") CreateHUDSAttribute(xmlDocument, attributeConstants.documentation, hudsConstants.str, package.Notes, attributesElement);
+                if (package.Notes != "")
+                {
+                    string note = Regex.Replace(package.Notes, "<[^>]+>", string.Empty);
+                    note = Regex.Replace(note, "&gt;", "greater than");
+                    note = Regex.Replace(note, "&lt;", "less than");
+                    CreateHUDSAttribute(xmlDocument, attributeConstants.documentation, hudsConstants.str, note, attributesElement);
+                }
                 if (package.Element.Alias != "") CreateHUDSAttribute(xmlDocument, attributeConstants.alias, hudsConstants.str, package.Element.Alias, attributesElement);
             }
 
@@ -219,6 +252,8 @@ namespace MTIP.Translations
             if (elementType == SysmlConstants.SYSMLOBJECT && element.ClassfierID != 0) elementType = SysmlConstants.SYSMLINSTANCESPECIFICATION;
             // Check if Initial Node is from Activity or State Machine
             if (elementType == SysmlConstants.SYSMLINITIALPSEUDOSTATE && parentType == SysmlConstants.SYSMLACTIVITY) elementType = SysmlConstants.SYSMLINITIALNODE;
+            
+            
             // Create id element to be added to data element
             XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
             idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
@@ -301,7 +336,7 @@ namespace MTIP.Translations
                     EA.Element classifierElement = repository.GetElementByID(element.ClassifierID);
                     string classifierType = GetSysMLType(classifierElement.Type, classifierElement.Stereotype, classifierElement.Subtype, classifierElement.MetaType);
                     XmlElement classifiedByRelationship;
-                    if(elementType == SysmlConstants.SYSMLACCEPTEVENTACTION || classifierType == SysmlConstants.SYSMLSENDSIGNALACTION) classifiedByRelationship = xmlDocument.CreateElement(relationshipConstants.trigger);
+                    if (elementType == SysmlConstants.SYSMLACCEPTEVENTACTION || classifierType == SysmlConstants.SYSMLSENDSIGNALACTION) classifiedByRelationship = xmlDocument.CreateElement(relationshipConstants.trigger);
                     else classifiedByRelationship = xmlDocument.CreateElement(relationshipConstants.classifiedBy);
                     classifiedByRelationship.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
 
@@ -323,7 +358,13 @@ namespace MTIP.Translations
                 }
             }
             if (element.Name != "") CreateHUDSAttribute(xmlDocument, attributeConstants.name, hudsConstants.str, element.Name, attributesElement);
-            if (element.Notes != "") CreateHUDSAttribute(xmlDocument, attributeConstants.documentation, hudsConstants.str, element.Notes, attributesElement);
+            if (element.Notes != "")
+            {
+                string note = Regex.Replace(element.Notes, "<[^>]+>", string.Empty);
+                note = Regex.Replace(note, "&gt;", "greater than");
+                note = Regex.Replace(note, "&lt;", "less than");
+                CreateHUDSAttribute(xmlDocument, attributeConstants.documentation, hudsConstants.str, note, attributesElement);
+            }
             if (element.Alias != "") CreateHUDSAttribute(xmlDocument, attributeConstants.alias, hudsConstants.str, element.Alias, attributesElement);
             if (element.Multiplicity != "") CreateHUDSAttribute(xmlDocument, attributeConstants.multiplicity, hudsConstants.str, element.Multiplicity, attributesElement);
             if (element.IsComposite && element.CompositeDiagram != null)
@@ -457,7 +498,6 @@ namespace MTIP.Translations
 
                     CreateHUDSAttribute(xmlDocument, attributeConstants.type, hudsConstants.str, attribute.Type, attElement);
                     CreateHUDSAttribute(xmlDocument, attributeConstants.name, hudsConstants.str, attribute.Name, attElement);
-
                     if (attribute.Default != "") CreateHUDSAttribute(xmlDocument, attributeConstants.initialValue, hudsConstants.str, attribute.Default, attElement);
                     if (attribute.Visibility != "") CreateHUDSAttribute(xmlDocument, attributeConstants.visibility, hudsConstants.str, attribute.Visibility, attElement);
                     if (attribute.Stereotype != "") CreateHUDSAttribute(xmlDocument, attributeConstants.stereotype, hudsConstants.str, attribute.Stereotype, attElement);
@@ -478,11 +518,17 @@ namespace MTIP.Translations
             {
                 if (!taggedValues.ContainsKey(taggedValue.Name) && taggedValue.Value != "")
                 {
-                    taggedValues.Add(taggedValue.Name, taggedValue.Value);
+                    string tagValue = Regex.Replace(taggedValue.Value, "<[^>]+>", string.Empty);
+                    tagValue = Regex.Replace(tagValue, "&gt;", "greater than");
+                    tagValue = Regex.Replace(tagValue, "&lt;", "less than");
+                    taggedValues.Add(taggedValue.Name, tagValue);
                 }
                 else if (taggedValue.Value != "")
                 {
-                    taggedValues[taggedValue.Name] += ";" + taggedValue.Value;
+                    string tagValue = Regex.Replace(taggedValue.Value, "<[^>]+>", string.Empty);
+                    tagValue = Regex.Replace(tagValue, "&gt;", "greater than");
+                    tagValue = Regex.Replace(tagValue, "&lt;", "less than");
+                    taggedValues[taggedValue.Name] += ";" + tagValue;
                 }
             }
 
@@ -582,7 +628,7 @@ namespace MTIP.Translations
             }
 
 
-            
+
         }
         public void UnpackageDiagram(EA.Diagram diagram, XmlDocument xmlDocument, string parentGuid, string parentType)
         {
@@ -626,59 +672,63 @@ namespace MTIP.Translations
                     {
                         EA.Element element = repository.GetElementByID(diagramObject.ElementID);
                         string elementType = GetSysMLType(element.Type, element.Stereotype, element.Subtype, element.MetaType);
-                        string elementGuid = element.ElementGUID.Substring(1, element.ElementGUID.Length - 2);
-                        // Add relationships to the data element
-                        XmlElement diagramObjectElement = xmlDocument.CreateElement(hudsConstants.element);
-                        diagramObjectElement.SetAttribute(hudsConstants.key, key.ToString());
-                        diagramObjectElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
+                        if (elementType != "")
+                        {
+                            string elementGuid = element.ElementGUID.Substring(1, element.ElementGUID.Length - 2);
+                            // Add relationships to the data element
+                            XmlElement diagramObjectElement = xmlDocument.CreateElement(hudsConstants.element);
+                            diagramObjectElement.SetAttribute(hudsConstants.key, key.ToString());
+                            diagramObjectElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
 
 
-                        XmlElement objectTypeElement = xmlDocument.CreateElement(relationshipConstants.type);
-                        objectTypeElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-                        objectTypeElement.InnerText = elementType;
-                        diagramObjectElement.AppendChild(objectTypeElement);
+                            XmlElement objectTypeElement = xmlDocument.CreateElement(relationshipConstants.type);
+                            objectTypeElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
+                            objectTypeElement.InnerText = elementType;
+                            diagramObjectElement.AppendChild(objectTypeElement);
 
-                        XmlElement objectIdElement = xmlDocument.CreateElement(hudsConstants.id);
-                        objectIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-                        objectIdElement.InnerText = elementGuid;
-                        diagramObjectElement.AppendChild(objectIdElement);
+                            XmlElement objectIdElement = xmlDocument.CreateElement(hudsConstants.id);
+                            objectIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
+                            objectIdElement.InnerText = elementGuid;
+                            diagramObjectElement.AppendChild(objectIdElement);
 
-                        XmlElement relMetadataElement = xmlDocument.CreateElement(hudsConstants.relationshipMetadata);
-                        relMetadataElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
+                            XmlElement relMetadataElement = xmlDocument.CreateElement(hudsConstants.relationshipMetadata);
+                            relMetadataElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
 
-                        XmlElement objectTopElement = xmlDocument.CreateElement(relationshipConstants.relMetadataTop);
-                        objectTopElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
-                        objectTopElement.InnerText = diagramObject.top.ToString();
-                        relMetadataElement.AppendChild(objectTopElement);
+                            XmlElement objectTopElement = xmlDocument.CreateElement(relationshipConstants.relMetadataTop);
+                            objectTopElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
+                            objectTopElement.InnerText = diagramObject.top.ToString();
+                            relMetadataElement.AppendChild(objectTopElement);
 
-                        XmlElement objectLeftElement = xmlDocument.CreateElement(relationshipConstants.relMetadataLeft);
-                        objectLeftElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
-                        objectLeftElement.InnerText = diagramObject.left.ToString();
-                        relMetadataElement.AppendChild(objectLeftElement);
+                            XmlElement objectLeftElement = xmlDocument.CreateElement(relationshipConstants.relMetadataLeft);
+                            objectLeftElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
+                            objectLeftElement.InnerText = diagramObject.left.ToString();
+                            relMetadataElement.AppendChild(objectLeftElement);
 
-                        XmlElement objectBottomElement = xmlDocument.CreateElement(relationshipConstants.relMetadataBottom);
-                        objectBottomElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
-                        objectBottomElement.InnerText = diagramObject.bottom.ToString();
-                        relMetadataElement.AppendChild(objectBottomElement);
+                            XmlElement objectBottomElement = xmlDocument.CreateElement(relationshipConstants.relMetadataBottom);
+                            objectBottomElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
+                            objectBottomElement.InnerText = diagramObject.bottom.ToString();
+                            relMetadataElement.AppendChild(objectBottomElement);
 
-                        XmlElement objectRightElement = xmlDocument.CreateElement(relationshipConstants.relMetadataRight);
-                        objectRightElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
-                        objectRightElement.InnerText = diagramObject.right.ToString();
-                        relMetadataElement.AppendChild(objectRightElement);
+                            XmlElement objectRightElement = xmlDocument.CreateElement(relationshipConstants.relMetadataRight);
+                            objectRightElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
+                            objectRightElement.InnerText = diagramObject.right.ToString();
+                            relMetadataElement.AppendChild(objectRightElement);
 
-                        XmlElement objectSeqElement = xmlDocument.CreateElement(relationshipConstants.relMetadataSeq);
-                        objectSeqElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
-                        objectSeqElement.InnerText = diagramObject.Sequence.ToString();
-                        relMetadataElement.AppendChild(objectSeqElement);
+                            XmlElement objectSeqElement = xmlDocument.CreateElement(relationshipConstants.relMetadataSeq);
+                            objectSeqElement.SetAttribute(hudsConstants.dtype, hudsConstants.intType);
+                            objectSeqElement.InnerText = diagramObject.Sequence.ToString();
+                            relMetadataElement.AppendChild(objectSeqElement);
 
-                        diagramObjectElement.AppendChild(relMetadataElement);
+                            diagramObjectElement.AppendChild(relMetadataElement);
 
-                        elementRelElement.AppendChild(diagramObjectElement);
-                        key += 1;
+                            elementRelElement.AppendChild(diagramObjectElement);
+                            key += 1;
+                        }
+                        
                     }
                     catch
                     {
-                        exportLog.Add("Unable to diagram object to XML: Diagram=" + diagram.Name + " - Diagram GUID=" + diagram.DiagramGUID + " - Type=");
+                        exportLog.Add("Unable to export diagram object to XML: Diagram=" + diagram.Name + " - Diagram GUID=" + diagram.DiagramGUID + " - Type=");
                     }
                 }
                 relationshipsElement.AppendChild(elementRelElement);
@@ -868,7 +918,7 @@ namespace MTIP.Translations
 
                         XmlElement clientTypeElement = xmlDocument.CreateElement(relationshipConstants.type);
                         clientTypeElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-                        clientTypeElement.InnerText =supplierType ;
+                        clientTypeElement.InnerText = supplierType;
 
                         XmlElement clientIdElement = xmlDocument.CreateElement(relationshipConstants.id);
                         clientIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
@@ -1072,7 +1122,6 @@ namespace MTIP.Translations
 
             xmlDocument.DocumentElement.AppendChild(dataElement);
         }
-
         private string GetSysMLType(string type, string stereotype, int subtype, string metatype)
         {
             StereotypeConstants stereotypeConstants = new StereotypeConstants();
@@ -1173,7 +1222,7 @@ namespace MTIP.Translations
             else if (type == SysmlConstants.STATE) elementType = SysmlConstants.SYSMLSTATE;
             else if (type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLCLASS;
             else if (type == SysmlConstants.STATEMACHINE) elementType = SysmlConstants.SYSMLSTATEMACHINE;
-            else if(type == SysmlConstants.PART)
+            else if (type == SysmlConstants.PART)
             {
                 if (stereotype == "") elementType = SysmlConstants.SYSMLPARTPROPERTY;
                 else if (stereotype == stereotypeConstants.partProperty) elementType = SysmlConstants.SYSMLPARTPROPERTY;
@@ -1198,8 +1247,8 @@ namespace MTIP.Translations
                 else if (type == SysmlConstants.ACTION && metatype == metatypeConstants.sendSignalAction) elementType = SysmlConstants.SYSMLSENDSIGNALACTION;
                 else if (type == SysmlConstants.ACTION) elementType = SysmlConstants.SYSMLACTION;
                 else if (type == SysmlConstants.ACTIVITYPARAMETER) elementType = SysmlConstants.SYSMLACTIVITYPARAMETER;
-                else if (type == SysmlConstants.ACTIONPIN && stereotype == stereotypeConstants.output) elementType = SysmlConstants.SYSMLOUTPUTPIN;
-                else if (type == SysmlConstants.ACTIONPIN && stereotype == stereotypeConstants.input) elementType = SysmlConstants.SYSMLINPUTPIN;
+                else if (type == SysmlConstants.ACTIONPIN && (stereotype == stereotypeConstants.output || metatype == metatypeConstants.outputPin)) elementType = SysmlConstants.SYSMLOUTPUTPIN;
+                else if (type == SysmlConstants.ACTIONPIN && (stereotype == stereotypeConstants.input || metatype == metatypeConstants.inputPin)) elementType = SysmlConstants.SYSMLINPUTPIN;
                 else if (type == SysmlConstants.ACTIONPIN) elementType = SysmlConstants.SYSMLACTIONPIN;
                 else if (type == SysmlConstants.EVENT)
                 {
@@ -1380,6 +1429,22 @@ namespace MTIP.Translations
                     exportLog.Add("Diagram location is not SysML compliant: Package diagrams must be a child of a model, package, model library or block");
                     exportLog.Add("     Diagram name: " + diagram.Name + " - Diagram GUID: " + diagram.DiagramGUID);
                 }
+            }
+        }
+        public void GetCustomProfiles()
+        {
+            if (repository.Models.Count > 0)
+            {
+                foreach (EA.Package rootModel in repository.Models) CheckForCustomProfile(rootModel);
+            }
+        }
+        public void CheckForCustomProfile(EA.Package package)
+        {
+            foreach (EA.Package childPackage in package.Packages)
+            {
+                if (childPackage.Element.Stereotype == "profile" && !customProfiles.ContainsKey(childPackage.Name)) customProfiles.Add(childPackage.Name, childPackage.PackageGUID.Substring(1, package.PackageGUID.Length - 2));
+                if (childPackage.Packages.Count > 0) CheckForCustomProfile(childPackage);
+
             }
 
         }

@@ -17,43 +17,43 @@ namespace MTIP.Constants
 {
     public class BlockConstants
     {
+        public string association;
         public string block;
         public string constraintBlock;
-        public string association;
+        public string dataType;
         public string enumeration;
         public string external;
-        public string port;
-        public string proxyPort;
-        public string fullPort;
         public string flowPort;
-        public string interfaceType;
+        public string fullPort;
         public string interfaceBlock;
+        public string interfaceType;
         public string operation;
-        public string dataType;
+        public string port;
         public string property;
+        public string proxyPort;
+        public string quantityKind;
         public string signal;
         public string unit;
-        public string quantityKind;
         public string valueType;
         public BlockConstants()
         {
+            association = "Association";
             block = "Block";
             constraintBlock = "ConstraintBlock";
-            association = "Association";
+            dataType = "DataType";
             enumeration = "Enumeration";
             external = "External";
-            port = "Port";
-            proxyPort = "ProxyPort";
-            fullPort = "FullPort";
             flowPort = "FlowPort";
-            interfaceType = "Interface";
+            fullPort = "FullPort";
             interfaceBlock = "InterfaceBlock";
+            interfaceType = "Interface";
             operation = "Operation";
-            dataType = "DataType";
-            property = "property";
+            port = "Port";
+            property = "Property";
+            proxyPort = "ProxyPort";
+            quantityKind = "QuantityKind";
             signal = "Signal";
             unit = "Unit";
-            quantityKind = "QuantityKind";
             valueType = "ValueType";
         }
     }

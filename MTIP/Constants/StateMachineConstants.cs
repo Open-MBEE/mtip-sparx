@@ -17,25 +17,25 @@ namespace MTIP.Constants
 {
     public class StateMachineConstants
     {
+        public string deepHistory;
         public string entryPoint;
         public string exitPoint;
-        public string synchronization;
         public string region;
+        public string shallowHistory;
         public string state;
         public string stateMachine;
         public string stateNode;
+        public string synchronization;
         public string trigger;
-        public string deepHistory;
-        public string shallowHistory;
         public StateMachineConstants()
         {
             entryPoint = "EntryPoint";
             exitPoint = "ExitPoint";
-            synchronization = "Synchronization";
             region = "Region";
             state = "State";
             stateMachine = "StateMachine";
             stateNode = "StateNode";
+            synchronization = "Synchronization";
             trigger = "Trigger";
         }
     }

@@ -17,17 +17,17 @@ namespace MTIP.Constants
 {
     public class ModelConstants
     {
-        public string model;
-        public string stereotype;
-        public string profile;
         public string documentation;
+        public string model;
+        public string profile;
+        public string stereotype;
         public string text;
         public ModelConstants()
         {
-            this.model = "Model";
-            this.stereotype = "stereotype";
-            this.profile = "profile";
             this.documentation = "documentation";
+            this.model = "Model";
+            this.profile = "profile";
+            this.stereotype = "stereotype";
             this.text = "text";
         }
     }

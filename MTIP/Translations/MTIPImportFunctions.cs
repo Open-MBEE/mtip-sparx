@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,7 +71,6 @@ namespace MTIP.Translations
         // Initiate creation of HUDS XML for model to be exported
         public void StartMTIPImport()
         {
-
             exportLog.Add("Errors while importing:");
 
             System.Xml.XmlDocument first_xml = new XmlDocument();
@@ -96,11 +96,34 @@ namespace MTIP.Translations
             }
             MessageBox.Show("Beginning import. This may take a while.", "Beginning Import", MessageBoxButtons.OK);
 
-            // Get ontology models to reference
+            // Create XmlItem for each data node in all packets
             GetSysmlMTIPModel(rootPkg, core_xml_node);
 
-            string date = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
             //System.IO.File.WriteAllLines("MTIPLog_" + date + ".txt", exportLog.ToArray());
+
+            // Save import log
+            XmlWriterSettings settings = new XmlWriterSettings()
+            {
+                CheckCharacters = false
+            };
+
+            string outputDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            XmlDocument exportDocument = new XmlDocument();
+            exportDocument.LoadXml("<exportLog></exportLog>");
+
+            foreach (string logLine in exportLog)
+            {
+                XmlElement logElement = exportDocument.CreateElement("log");
+                logElement.InnerText = logLine;
+                exportDocument.DocumentElement.AppendChild(logElement);
+            }
+            //outputDirectory = outputDirectory.Replace("\\", "/");
+            string date = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+            string importedLname = Path.Combine(outputDirectory + "\\", "Documents\\MTIP_EA_ImportLog" + date + ".xml");
+            XmlWriter xmlEWriter = XmlWriter.Create(importedLname, settings);
+            exportDocument.Save(xmlEWriter);
+            xmlEWriter.Close();
+
             exportLog = new List<string>();
         }
         //
@@ -248,6 +271,119 @@ namespace MTIP.Translations
                 exportLog.Add("Could not build model. PLease make sure there is at least one data element without hasParent relationship in the XML");
             }
         }
+        internal void GetChildren(string parentId)
+        {
+            if (parentMapping.ContainsKey(parentId))
+            {
+                XmlItem parentModelElement = parsedXml[parentId];
+                List<string> childElementIds = parentMapping[parentId];
+
+                // Add model packages
+                if (parentModelElement.GetCategory() == SysmlConstants.MODEL || parentModelElement.GetElementType() == SysmlConstants.MODEL)
+                {
+                    foreach (string childElementId in childElementIds)
+                    {
+                        XmlItem childElement = parsedXml[childElementId];
+                        if (childElement.GetElementType() == SysmlConstants.PACKAGE || childElement.GetElementType() == SysmlConstants.PROFILE)
+                        {
+                            AddPkgPkg(parentId, childElementId);
+                            GetChildren(childElementId);
+                        }
+
+                    }
+                }
+                else if (parentModelElement.GetElementType() == SysmlConstants.PACKAGE || parentModelElement.GetElementType() == SysmlConstants.PROFILE)
+                {
+                    foreach (string childElementId in childElementIds)
+                    {
+                        XmlItem childElement = parsedXml[childElementId];
+
+                        // Add element to package
+                        if (childElement.GetCategory() == SysmlConstants.ELEMENT && childElement.GetElementType() != SysmlConstants.PACKAGE)
+                        {
+                            if (childElement.GetElementType() == SysmlConstants.HYPERLINK)
+                            {
+                                hyperLinksToAdd.Add(childElement.GetMappingID(), childElement);
+                            }
+                            else
+                            {
+                                AddPkgElement(parentId, childElementId);
+                            }
+                            GetChildren(childElementId);
+                        }
+                        //Add package to package
+                        else if (childElement.GetElementType() == SysmlConstants.PACKAGE || childElement.GetElementType() == SysmlConstants.PROFILE)
+                        {
+                            AddPkgPkg(parentId, childElementId);
+                            GetChildren(childElementId);
+                        }
+                        else if (childElement.GetElementType() == SysmlConstants.STEREOTYPE)
+                        {
+                            AddPkgElement(parentId, childElementId);
+                            GetChildren(childElementId);
+                        }
+                        // Add diagram to list
+                        else if (childElement.GetCategory() == SysmlConstants.DIAGRAM)
+                        {
+                            diagramElements.Add(childElement.GetMappingID(), childElement);
+                        }
+                    }
+                }
+                else if (parentModelElement.GetCategory() == SysmlConstants.ELEMENT && parentModelElement.GetElementType() != SysmlConstants.PACKAGE)
+                {
+                    foreach (string childElementId in childElementIds)
+                    {
+                        XmlItem childElement = parsedXml[childElementId];
+                        // Add element to element
+                        if (childElement.GetElementType() == SysmlConstants.CONSTRAINT)
+                        {
+
+                            constraintsToAdd.Add(childElement.GetMappingID(), childElement);
+                            GetChildren(childElementId);
+
+
+                        }
+                        else if (childElement.GetElementType() == SysmlConstants.OPAQUEEXPRESSION)
+                        {
+                            if (opaqueExpressionsToAdd.ContainsKey(childElement.GetParent())) opaqueExpressionsToAdd[childElement.GetParent()].Add(childElement);
+                            else
+                            {
+                                List<XmlItem> opaqueList = new List<XmlItem>();
+                                opaqueList.Add(childElement);
+                                opaqueExpressionsToAdd.Add(childElement.GetParent(), opaqueList);
+                            }
+                        }
+                        else if (childElement.GetElementType() == SysmlConstants.HYPERLINK)
+                        {
+                            hyperLinksToAdd.Add(childElement.GetParent(), childElement);
+
+                        }
+                        else if (childElement.GetCategory() == SysmlConstants.ELEMENT && childElement.GetElementType() != SysmlConstants.PACKAGE)
+                        {
+                            AddElementElement(parentId, childElementId);
+
+                            GetChildren(childElementId);
+                        }
+                        else if (childElement.GetCategory() == SysmlConstants.DIAGRAM)
+                        {
+                            try
+                            {
+                                diagramElements.Add(childElement.GetMappingID(), childElement);
+                            }
+                            catch
+                            {
+                                exportLog.Add("Diagram " + childElement.GetMappingID() + " not found XML");
+                                //Tools.Log("Diagram " + childElement.GetMappingID() + " exist in another XML");
+                            }
+                        }
+                        else if (childElement.GetCategory() == SysmlConstants.RELATIONSHIP && !relationshipElements.ContainsKey(childElement.GetMappingID()))
+                        {
+                            relationshipElements.Add(childElement.GetMappingID(), childElement);
+                        }
+                    }
+                }
+            }
+        }
 
         internal XmlItem GetAttributes(XmlNode fieldNode, XmlItem modelElement)
         {
@@ -257,7 +393,7 @@ namespace MTIP.Translations
             {
                 try
                 {
-                    if (attribute.Attributes["key"].Value == attributeConstants.attributes)
+                    if (attribute.Attributes["key"].Value == attributeConstants.attribute)
                     {
                         foreach (XmlNode attributeAttrib in attribute)
                         {
@@ -483,119 +619,6 @@ namespace MTIP.Translations
                 }
             }
             return modelElement;
-        }
-        internal void GetChildren(string parentId)
-        {
-            if (parentMapping.ContainsKey(parentId))
-            {
-                XmlItem parentModelElement = parsedXml[parentId];
-                List<string> childElementIds = parentMapping[parentId];
-
-                // Add model packages
-                if (parentModelElement.GetCategory() == SysmlConstants.MODEL || parentModelElement.GetElementType() == SysmlConstants.MODEL)
-                {
-                    foreach (string childElementId in childElementIds)
-                    {
-                        XmlItem childElement = parsedXml[childElementId];
-                        if (childElement.GetElementType() == SysmlConstants.PACKAGE || childElement.GetElementType() == SysmlConstants.PROFILE)
-                        {
-                            AddPkgPkg(parentId, childElementId);
-                            GetChildren(childElementId);
-                        }
-
-                    }
-                }
-                else if (parentModelElement.GetElementType() == SysmlConstants.PACKAGE || parentModelElement.GetElementType() == SysmlConstants.PROFILE)
-                {
-                    foreach (string childElementId in childElementIds)
-                    {
-                        XmlItem childElement = parsedXml[childElementId];
-
-                        // Add element to package
-                        if (childElement.GetCategory() == SysmlConstants.ELEMENT && childElement.GetElementType() != SysmlConstants.PACKAGE)
-                        {
-                            if (childElement.GetElementType() == SysmlConstants.HYPERLINK)
-                            {
-                                hyperLinksToAdd.Add(childElement.GetMappingID(), childElement);
-                            }
-                            else
-                            {
-                                AddPkgElement(parentId, childElementId);
-                            }
-                            GetChildren(childElementId);
-                        }
-                        //Add package to package
-                        else if (childElement.GetElementType() == SysmlConstants.PACKAGE || childElement.GetElementType() == SysmlConstants.PROFILE)
-                        {
-                            AddPkgPkg(parentId, childElementId);
-                            GetChildren(childElementId);
-                        }
-                        else if (childElement.GetElementType() == SysmlConstants.STEREOTYPE)
-                        {
-                            AddPkgElement(parentId, childElementId);
-                            GetChildren(childElementId);
-                        }
-                        // Add diagram to list
-                        else if (childElement.GetCategory() == SysmlConstants.DIAGRAM)
-                        {
-                            diagramElements.Add(childElement.GetMappingID(), childElement);
-                        }
-                    }
-                }
-                else if (parentModelElement.GetCategory() == SysmlConstants.ELEMENT && parentModelElement.GetElementType() != SysmlConstants.PACKAGE)
-                {
-                    foreach (string childElementId in childElementIds)
-                    {
-                        XmlItem childElement = parsedXml[childElementId];
-                        // Add element to element
-                        if (childElement.GetElementType() == SysmlConstants.CONSTRAINT)
-                        {
-
-                            constraintsToAdd.Add(childElement.GetMappingID(), childElement);
-                            GetChildren(childElementId);
-
-
-                        }
-                        else if (childElement.GetElementType() == SysmlConstants.OPAQUEEXPRESSION)
-                        {
-                            if (opaqueExpressionsToAdd.ContainsKey(childElement.GetParent())) opaqueExpressionsToAdd[childElement.GetParent()].Add(childElement);
-                            else
-                            {
-                                List<XmlItem> opaqueList = new List<XmlItem>();
-                                opaqueList.Add(childElement);
-                                opaqueExpressionsToAdd.Add(childElement.GetParent(), opaqueList);
-                            }
-                        }
-                        else if (childElement.GetElementType() == SysmlConstants.HYPERLINK)
-                        {
-                            hyperLinksToAdd.Add(childElement.GetParent(), childElement);
-
-                        }
-                        else if (childElement.GetCategory() == SysmlConstants.ELEMENT && childElement.GetElementType() != SysmlConstants.PACKAGE)
-                        {
-                            AddElementElement(parentId, childElementId);
-
-                            GetChildren(childElementId);
-                        }
-                        else if (childElement.GetCategory() == SysmlConstants.DIAGRAM)
-                        {
-                            try
-                            {
-                                diagramElements.Add(childElement.GetMappingID(), childElement);
-                            }
-                            catch
-                            {
-                                exportLog.Add("Diagram " + childElement.GetMappingID() + " not found XML");
-                                //Tools.Log("Diagram " + childElement.GetMappingID() + " exist in another XML");
-                            }
-                        }
-                        else if (childElement.GetCategory() == SysmlConstants.RELATIONSHIP && !relationshipElements.ContainsKey(childElement.GetMappingID()))
-                        {
-                            relationshipElements.Add(childElement.GetMappingID(), childElement);
-                        }
-                    }
-                }
-            }
         }
         internal void AddPkgPkg(string parentId, string childId)
         {

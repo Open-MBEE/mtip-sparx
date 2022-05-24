@@ -18,25 +18,25 @@ namespace MTIP.Constants
     public class ProfileConstants
     {
         public string classType;
-        public string part;
         public string constraint;
-        public string objectType;
         public string exceptionHandler;
-        public string package;
-        public string text;
         public string note;
         public string objectiveFunction;
+        public string objectType;
+        public string package;
+        public string part;
+        public string text;
 
         public ProfileConstants(){
             classType = "Class";
-            part = "Part";
             constraint = "Constraint";
-            objectType = "Object";
             exceptionHandler = "ExceptionHandler";
-            package = "Package";
-            text = "Text";
             note = "Note";
             objectiveFunction = "ObjectiveFunction";
+            objectType = "Object";
+            package = "Package";
+            part = "Part";
+            text = "Text";
         }
 
     }

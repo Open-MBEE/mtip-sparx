@@ -18,56 +18,56 @@ namespace MTIP.Constants
     public class ActivityConstants
     {
         public string acceptEventAction;
-        public string activity;
         public string action;
         public string actionPin;
-        public string stateNode;
+        public string activity;
         public string activityParameter;
         public string activityPartion;
         public string callBehaviorAction;
         public string callOperationAction;
         public string centralBufferNode;
-        public string createObjectAction;
-        public string property;
-        public string destroyObjectAction;
+        public string change;
         public string conditionalNode;
+        public string createObjectAction;
         public string decision;
+        public string destroyObjectAction;
         public string eventType;
+        public string forkNode;
+        public string informationItem;
         public string interruptibleActivityRegion;
         public string mergeNode;
         public string objectNode;
-        public string forkNode;
-        public string synchronization;
+        public string property;
         public string sendSignalAction;
-        public string change;
-        public string informationItem;
+        public string stateNode;
+        public string synchronization;
 
 
         public ActivityConstants(){
-            activity = "Activity";
-            stateNode = "StateNode";
             acceptEventAction = "AcceptEventAction";
-            activityParameter = "ActivityParameter";
-            activityPartion = "ActivityPartition";
             action = "Action";
             actionPin = "ActionPin";
+            activity = "Activity";
+            activityParameter = "ActivityParameter";
+            activityPartion = "ActivityPartition";
             callBehaviorAction = "CallBehaviorAction";
             callOperationAction = "CallOperationAction";
             centralBufferNode = "CentralBufferNode";
-            createObjectAction = "CreateObjectAction";
-            destroyObjectAction = "DestroyObjectAction";
-            property = "Property";
+            change = "Change";
             conditionalNode = "ConditionalNode";
+            createObjectAction = "CreateObjectAction";
             decision = "Decision";
+            destroyObjectAction = "DestroyObjectAction";
             eventType = "Event";
+            forkNode = "ForkNode";
+            informationItem = "InformationItem";
             interruptibleActivityRegion = "InterruptibleActivityRegion";
             mergeNode = "MergeNode";
             objectNode = "ObjectNode";
-            forkNode = "ForkNode";
-            synchronization = "Synchronization";
+            property = "Property";
             sendSignalAction = "SendSignalAction";
-            change = "Change";
-            informationItem = "InformationItem";
+            stateNode = "StateNode";
+            synchronization = "Synchronization";
         }
     }
 }

@@ -17,25 +17,25 @@ namespace MTIP.Constants
 {
     public class DiagramConstants
     {
-        public string component;
         public string activity;
-        public string logical;
         public string classType;
+        public string component;
         public string compositeStructure;
-        public string package;
         public string custom;
+        public string logical;
+        public string package;
         public string sequence;
         public string statechart;
         public string useCase;
         public DiagramConstants()
         {
-            component = "Component";
             activity = "Activity";
-            logical = "Logical";
             classType = "Class";
+            component = "Component";
             compositeStructure = "CompositeStructure";
-            package = "Package";
             custom = "Custom";
+            logical = "Logical";
+            package = "Package";
             sequence = "Sequence";
             statechart = "Statechart";
             useCase = "Use Case";

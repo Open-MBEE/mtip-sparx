@@ -17,23 +17,23 @@ namespace MTIP.Constants
 {
     public class InternalBlockConstants
     {
-        public string boundReference;
         public string boundary;
-        public string property;
-        public string flowProperty;
-        public string referenceProperty;
+        public string boundReference;
         public string constraintProperty;
+        public string flowProperty;
         public string participantProperty;
+        public string property;
+        public string referenceProperty;
 
         public InternalBlockConstants()
         {
-            boundReference = "BoundReference";
             boundary = "Boundary";
-            property = "Property";
-            flowProperty = "FlowProperty";
-            referenceProperty = "ReferenceProperty";
+            boundReference = "BoundReference";
             constraintProperty = "ConstraintProperty";
+            flowProperty = "FlowProperty";
             participantProperty = "ParticipantProperty";
+            property = "Property";
+            referenceProperty = "ReferenceProperty";
         }
     }
 }

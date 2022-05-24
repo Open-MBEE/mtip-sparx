@@ -19,9 +19,9 @@ namespace MTIP.Constants
     public class SysmlConstants
     {
         //Categorization constants
+        public static string DIAGRAM = "Diagram";
         public static string ELEMENT = "Element";
         public static string RELATIONSHIP = "Relationship";
-        public static string DIAGRAM = "Diagram";
 
         // Diagrams
         // ActivityDiagram

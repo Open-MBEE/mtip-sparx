@@ -17,22 +17,22 @@ namespace MTIP.Constants
 {
     public class RequirementConstants
     {
-        public string requirement;
         public string designConstraint;
         public string extendedRequirement;
         public string functionalRequirement;
         public string interfaceRequirement;
         public string performanceRequirement;
         public string physicalRequirement;
+        public string requirement;
         public RequirementConstants()
         {
-            requirement = "Requirement";
             designConstraint = "DesignConstraint";
             extendedRequirement = "ExtendedRequirement";
             functionalRequirement = "FunctionalRequirement";
             interfaceRequirement = "InterfaceRequirement";
             performanceRequirement = "PerformanceRequirement";
             physicalRequirement = "PhysicalRequirement";
+            requirement = "Requirement";
         }
     }
 }
