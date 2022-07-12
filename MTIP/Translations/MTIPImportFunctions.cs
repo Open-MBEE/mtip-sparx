@@ -208,6 +208,7 @@ namespace MTIP.Translations
                 }
                 else parentMapping[modelElement.GetParent()].Add(modelElement.GetMappingID());
                 if (!modelElements.ContainsKey(modelElement.GetMappingID())) modelElements.Add(modelElement.GetMappingID(), modelElement);
+
             }
 
             return modelElements;
@@ -268,31 +269,20 @@ namespace MTIP.Translations
             }
             catch
             {
-                exportLog.Add("Could not build model. PLease make sure there is at least one data element without hasParent relationship in the XML");
+                exportLog.Add("Could not build model. Please make sure there is at least one data element without hasParent relationship in the XML");
             }
         }
         internal void GetChildren(string parentId)
         {
             if (parentMapping.ContainsKey(parentId))
             {
+
                 XmlItem parentModelElement = parsedXml[parentId];
                 List<string> childElementIds = parentMapping[parentId];
-
+                foreach (string childElementId in childElementIds) Tools.Log(parsedXml[childElementId].GetCategory() + " - " + parentModelElement.GetCategory() + " -" + parentModelElement.GetElementType() + " - " + parentModelElement.GetMappingID() + " - " + childElementId);
                 // Add model packages
-                if (parentModelElement.GetCategory() == SysmlConstants.MODEL || parentModelElement.GetElementType() == SysmlConstants.MODEL)
-                {
-                    foreach (string childElementId in childElementIds)
-                    {
-                        XmlItem childElement = parsedXml[childElementId];
-                        if (childElement.GetElementType() == SysmlConstants.PACKAGE || childElement.GetElementType() == SysmlConstants.PROFILE)
-                        {
-                            AddPkgPkg(parentId, childElementId);
-                            GetChildren(childElementId);
-                        }
-
-                    }
-                }
-                else if (parentModelElement.GetElementType() == SysmlConstants.PACKAGE || parentModelElement.GetElementType() == SysmlConstants.PROFILE)
+                if (parentModelElement.GetElementType() == SysmlConstants.PACKAGE || parentModelElement.GetElementType() == SysmlConstants.PROFILE ||
+                    parentModelElement.GetCategory() == SysmlConstants.MODEL || parentModelElement.GetElementType() == SysmlConstants.MODEL)
                 {
                     foreach (string childElementId in childElementIds)
                     {
@@ -1541,7 +1531,7 @@ namespace MTIP.Translations
             DiagramConstants diagramConstants = new DiagramConstants();
             EA.Package pkg = repository.GetPackageByID(1);
             EA.Diagram relationshipDiagram = repository.GetPackageByID(1).Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.component); ;
-            if (parentItem.GetElementType() == SysmlConstants.PACKAGE || parentItem.GetElementType() == SysmlConstants.PROFILE)
+            if (parentItem.GetElementType() == SysmlConstants.PACKAGE || parentItem.GetElementType() == SysmlConstants.PROFILE || parentItem.GetElementType() == SysmlConstants.MODEL)
             {
                 EA.Package parentPkg = repository.GetPackageByGuid(parentItem.GetEAID());
                 if (diagramItem.Value.GetElementType() == SysmlConstants.ACT)

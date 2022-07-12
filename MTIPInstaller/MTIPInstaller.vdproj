@@ -27,6 +27,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_8144FFA0E3804774DF39636F148BEE99"
+        "OwnerKey" = "8:_0E2200DEA6714C16ACB8140497B114F5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_0E2200DEA6714C16ACB8140497B114F5"
         "MsmSig" = "8:_UNDEFINED"
@@ -163,6 +169,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8144FFA0E3804774DF39636F148BEE99"
+            {
+            "SourcePath" = "8:MTIP.tlb"
+            "TargetName" = "8:MTIP.tlb"
+            "Tag" = "8:"
+            "Folder" = "8:_2EE99A1C9DEA4016A69E87866A364607"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:2"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -219,15 +245,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MTIP"
-        "ProductCode" = "8:{DE7DA4A9-F240-4AC8-93D8-9F297E99E3CF}"
-        "PackageCode" = "8:{AC8FBA2C-3E16-4800-8094-D7385CB72B69}"
+        "ProductCode" = "8:{1156D7CC-3C58-40CB-9C8D-CC99A4FB548E}"
+        "PackageCode" = "8:{597EE2FB-18FB-4C85-AD56-97CE70DF2A3E}"
         "UpgradeCode" = "8:{23596B83-2DEF-4D33-BF75-C0D69956284A}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:The Aerospace Corporation"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
