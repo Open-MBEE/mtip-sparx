@@ -279,7 +279,6 @@ namespace MTIP.Translations
 
                 XmlItem parentModelElement = parsedXml[parentId];
                 List<string> childElementIds = parentMapping[parentId];
-                foreach (string childElementId in childElementIds) Tools.Log(parsedXml[childElementId].GetCategory() + " - " + parentModelElement.GetCategory() + " -" + parentModelElement.GetElementType() + " - " + parentModelElement.GetMappingID() + " - " + childElementId);
                 // Add model packages
                 if (parentModelElement.GetElementType() == SysmlConstants.PACKAGE || parentModelElement.GetElementType() == SysmlConstants.PROFILE ||
                     parentModelElement.GetCategory() == SysmlConstants.MODEL || parentModelElement.GetElementType() == SysmlConstants.MODEL)
