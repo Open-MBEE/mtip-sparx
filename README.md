@@ -26,16 +26,16 @@ Metamodel mapping implemented adheres to the to the SysML v1.5 specification whi
 ### System Requirements
 
 * Windows 10
-* Follow the installer to complete installation
-* Once completed you can now access the MTIP-Sparx EA plugin within the “Specialized” tab in EA
 
 ### Installation
 
 * Download the MTIPInstaller.msi or setup.exe from repository (located under "Releases" on the right panel" and run following installer instructions.
+* Follow the installer to complete installation
+* Once completed you can now access the MTIP-Sparx EA plugin within the “Specialized” tab in EA
 
 ### Building Instructions
 
-To build the plugin along with the plugin installer
+To build the plugin along with the plugin installer for development environment
 
 * Add registry key
   * See step 2 in [Create your first EA Add-in](https://sparxsystems.us/go/enterprise-architect-cloud/?keyword=%2Bsparx%20%2Benterprise%20%2Barchitect&creative=498008725817&gclid=CjwKCAiAp8iMBhAqEiwAJb94z-PmUa41-smzhAaqj634_Tt1h6UZBraN4dHq_1yjsy-FZh98_RWlPhoCreEQAvD_BwE](https://bellekens.com/2011/01/29/tutorial-create-your-first-c-enterprise-architect-add-in-in-10-minutes/))
