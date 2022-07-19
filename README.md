@@ -75,11 +75,6 @@ The following section includes instructions on plugin usage once built or instal
 Karina Martinez, The Aerospace Corporation
 oss@aero.org
 
-## Version History
-
-* 1.0.0
-  * Initial Release
-
 ## License
 
 This project is licensed under the Apache Commons License 2.0 - see the LICENSE.html file for details
