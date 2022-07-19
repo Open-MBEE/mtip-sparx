@@ -6,7 +6,7 @@
 
 ## Description
 
-MTIP-Sparx EA plugin is developed by The Aerospace Corporation to create an exchange standard that enables a nearly 100% 1-to-1 translation of Model Based Systems Engineering (MBSE) models to and from Cameo Systems Modeler using principles derived in the Systems Modeling Language (SysML). The developed plugin enables a way for SysML v1.5 models to be exchanged freely between the tools and includes elements, relationships, and diagrams. Object types are mapped to a common SysML metamodel and exported/imported using the Huddle Unified Data Schema (HUDS) V2 Extensible Markup Language (XML) format.
+MTIP-Sparx EA plugin is developed by The Aerospace Corporation to create an exchange standard that enables a nearly  1-to-1 translation of Model Based Systems Engineering (MBSE) models to and from Cameo Systems Modeler using principles derived in the Systems Modeling Language (SysML). The developed plugin enables a way for SysML v1.5 models to be exchanged freely between the tools and includes elements, relationships, and diagrams. Object types are mapped to a common SysML metamodel and exported/imported using the Huddle Unified Data Schema (HUDS) V2 Extensible Markup Language (XML) format.
 
 Metamodel mapping implemented adheres to the to the SysML v1.5 specification which includes 9 diagram types along with the general-purpose constructs that may be shown on the multiple diagram types.
 
