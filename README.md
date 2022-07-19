@@ -21,7 +21,7 @@ Metamodel mapping implemented adheres to the to the SysML v1.5 specification whi
   * Microsoft Visual Studio Installer Project Extension
   * EA Add-in Framework API written in C#
     * The EA API assembly must be added to the project references. The current project points to the Interop.EA.dll in the EA default installation folder (C:\Program Files\Sparx Systems\EA). If you installed EA at a different, location you will have to reconfigure the reference.
-      * No action needs to be taken if the reference is located upon cloning the project
+    * No action needs to be taken if the reference is located upon cloning the project
 
 ### System Requirements
 
@@ -29,9 +29,9 @@ Metamodel mapping implemented adheres to the to the SysML v1.5 specification whi
 
 ### Installation
 
-* Download the MTIPInstaller.msi or setup.exe from repository (located under "Releases" on the right panel" and run following installer instructions.
+* Download the MTIPInstaller.msi or setup.exe from repository (located under "Releases" on the right panel) and run following installer instructions
 * Follow the installer to complete installation
-* Once completed you can now access the MTIP-Sparx EA plugin within the “Specialized” tab in EA
+* Once completed you can now access the MTIP-Sparx EA plugin within the "Specialized" tab in EA
 
 ### Building Instructions
 
@@ -49,17 +49,17 @@ The following section includes instructions on plugin usage once built or instal
 
 * Import HUDS V2 XML
   * Open existing project file or create a new project you would like to import your model/package into.
-* Select to “Specialize” tab in EA toolbar
-* Open MTIP AddIn menu from Add-Ins panel
-* Select “Launch” from AddIn dropdown menu
-* Select “Import from HUDS XML”
-* Select HUDS V2 XML(s) to import (multiple HUDS V2 XML files can be imported)
-* Select “Import”
-* Message will appear once import is complete
-* Import logs can be found in .....
+  * Select to “Specialize” tab in EA toolbar
+  * Open MTIP Add-In menu from Add-Ins panel
+  * Select “Launch” from Add-In dropdown menu
+  * Select “Import from HUDS XML”
+  * Select HUDS V2 XML(s) to import (multiple HUDS V2 XML files can be imported)
+  * Select “Import”
+  * Message will appear once import is complete
+  * Import logs can be found in the users "Documents" directory
 
 * Export HUDS V2 XML
-  * Open existing project for export
+  * Open existing project to export
   * In project browser select Root Node or Package you would like to export (Can only select one at a time)
   * Two options for export
     * Navigate to “Specialize” tab in EA toolbar and open MTIP AddIn menu from Add-Ins panel
