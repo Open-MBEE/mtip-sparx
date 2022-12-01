@@ -1,0 +1,21 @@
+# Copyright 2022 LieberLieber Software GmbH 
+# Author: Daniel Siegl
+# Description: BUild the MTIP.sln and the Setup after each commit.
+
+name: Build MTIP.sln
+on: [push]
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+     - name: Checkout Code
+       uses: actions/checkout@v1
+     
+     - name: Setup MSBuild Path
+       uses: microsoft/setup-msbuild@v1.1
+        
+     - name: Build Solution
+       run: msbuild MTIP.sln /p:Configuration=Release
+       
+     
