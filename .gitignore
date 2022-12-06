@@ -1,0 +1,8 @@
+.vs/**/*.*
+MTIP/obj/**/*.*
+MTIP/bin/**/*.*
+RegAsmProxy/obj/**/*.*
+RegAsmProxy/bin/**/*.*
+MTIPInstaller/Debug/**/*.*
+MTIPInstaller/Release/**/*.*
+
