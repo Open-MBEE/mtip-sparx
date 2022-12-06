@@ -1,9 +1,12 @@
 # Copyright 2022 LieberLieber Software GmbH 
 # Author: Daniel Siegl
-# Description: BUild the MTIP.sln and the Setup after each commit.
+# Description: Build the MTIP.sln and the Setup after each commit.
 
 name: Build MTIP.sln
 on: [push]
+env:
+  VisualStudioPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe
+  DisableOutOfProcPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\
 jobs:
   build:
     runs-on: [self-hosted, pcs]
@@ -15,15 +18,29 @@ jobs:
      
      - name: Setup MSBuild Path
        uses: microsoft/setup-msbuild@v1.1
-        
+
+    # msbuild can't build the setups used.    
+    # we use this build step to see if the c# side of things works fine
      - name: Build Solution
-       run: msbuild MTIP.sln /p:Configuration=Release
+       run: msbuild .\MTIP\MTIP.csproj /p:Configuration=Release
+
+    #prepare devenv to be able to build setups
+     - name: Prepare Devenv to be able to build setups
+       working-directory: ${{env.DisableOutOfProcPath}}
+       run: .\DisableOutOfProcBuild.exe
+
+    #wait 60 seconds as the devenv build is asyncronous
+     - name: Build Setup with Devenv
+       run: |
+            &"${{env.VisualStudioPath}}" ".\MTIP.sln" /Build "Release|Any CPU" /out out2.log
+            Start-Sleep -Seconds 60
+            type out2.log 
 
      - name: Publish Binary Artifact
        uses: actions/upload-artifact@v3
        with:
           name: mtip-sparx-installer
           path: .\MTIPInstaller\Release\*.msi
-          retention-days: 5
+          retention-days: 30
        
      
