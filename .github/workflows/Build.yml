@@ -6,7 +6,8 @@ name: Build MTIP.sln
 on: [push]
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: [self-hosted, pcs]
+    timeout-minutes: 15
     
     steps:
      - name: Checkout Code
