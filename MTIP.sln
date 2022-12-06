@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTIP", "MTIP\MTIP.csproj", 
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MTIPInstaller", "MTIPInstaller\MTIPInstaller.vdproj", "{A1D16950-6FFB-4B23-9AA6-E95F5B1DD65B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegAsmProxy", "RegAsmProxy\RegAsmProxy.csproj", "{FF50BA01-4B0B-4DCF-AC88-4F773F8FCFD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,7 +22,10 @@ Global
 		{A1D16950-6FFB-4B23-9AA6-E95F5B1DD65B}.Debug|Any CPU.ActiveCfg = Debug
 		{A1D16950-6FFB-4B23-9AA6-E95F5B1DD65B}.Debug|Any CPU.Build.0 = Debug
 		{A1D16950-6FFB-4B23-9AA6-E95F5B1DD65B}.Release|Any CPU.ActiveCfg = Release
-		{A1D16950-6FFB-4B23-9AA6-E95F5B1DD65B}.Release|Any CPU.Build.0 = Release
+		{FF50BA01-4B0B-4DCF-AC88-4F773F8FCFD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF50BA01-4B0B-4DCF-AC88-4F773F8FCFD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF50BA01-4B0B-4DCF-AC88-4F773F8FCFD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF50BA01-4B0B-4DCF-AC88-4F773F8FCFD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
