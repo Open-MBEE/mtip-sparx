@@ -18,5 +18,12 @@ jobs:
         
      - name: Build Solution
        run: msbuild MTIP.sln /p:Configuration=Release
+
+     - name: Publish Binary Artifact
+       uses: actions/upload-artifact@v3
+       with:
+          name: mtip-sparx-installer
+          path: .\MTIPInstaller\Release\*.msi
+          retention-days: 5
        
      
