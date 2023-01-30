@@ -299,6 +299,15 @@
                     </xs:documentation>
                   </xs:annotation>
                   <xs:sequence>
+                    <xs:element name="unified">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute name="_dtype" type="xs:string" use="required" />
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
                     <xs:element name="cameo">
                       <xs:complexType>
                         <xs:simpleContent>
