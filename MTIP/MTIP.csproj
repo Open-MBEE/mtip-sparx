@@ -88,6 +88,7 @@
     <Compile Include="MTIP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translations\MTIPExportFunctions.cs" />
+    <Compile Include="Translations\MTIPCommon.cs" />
     <Compile Include="Translations\MTIPImportFunctions.cs" />
     <Compile Include="Utilities\Tools.cs" />
   </ItemGroup>
