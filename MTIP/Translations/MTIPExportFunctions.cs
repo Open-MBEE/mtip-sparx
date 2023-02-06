@@ -28,9 +28,6 @@ namespace MTIP.Translations
         private string outputDirectory;
         public Dictionary<string, EA.Package> profilePackages;
         public List<string> exportLog;
-       
-        public StereotypeConstants stereotypeConstants;
-        
         public Dictionary<string, string> customProfiles;
 
         public MTIPExportFunctions(MTIP plugin)
@@ -38,9 +35,6 @@ namespace MTIP.Translations
             repository = plugin.GetRepository();
             profilePackages = new Dictionary<string, EA.Package>();
             exportLog = new List<string>();
-    
-            stereotypeConstants = new StereotypeConstants();
-            
             customProfiles = new Dictionary<string, string>();
         }
         public void ExportToMTIPXML()
@@ -969,11 +963,11 @@ namespace MTIP.Translations
             {
                 packageType = SysmlConstants.SYSMLMODEL;
             }
-            else if (package.Element.Stereotype == stereotypeConstants.model)
+            else if (package.Element.Stereotype == StereotypeConstants.MODEL)
             {
                 packageType = SysmlConstants.SYSMLMODEL;
             }
-            else if (package.Element.Stereotype == stereotypeConstants.profile)
+            else if (package.Element.Stereotype == StereotypeConstants.PROFILE)
             {
                 packageType = SysmlConstants.SYSMLPROFILE;
                 if (!profilePackages.ContainsKey(package.Name)) profilePackages.Add(package.Name, package);
@@ -1089,32 +1083,30 @@ namespace MTIP.Translations
         }
         private string GetSysMLType(string type, string stereotype, int subtype, string metatype)
         {
-            StereotypeConstants stereotypeConstants = new StereotypeConstants();
-           
             string elementType = "";
-            if (stereotype == stereotypeConstants.block) elementType = SysmlConstants.SYSMLBLOCK;
-            else if (stereotype == stereotypeConstants.hardware) elementType = SysmlConstants.SYSMLBLOCK;
-            else if (stereotype == stereotypeConstants.boundReference) elementType = SysmlConstants.SYSMLBOUNDREFERENCE;
-            else if (stereotype == stereotypeConstants.valueProperty) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
-            else if (stereotype == stereotypeConstants.participantProperty) elementType = SysmlConstants.SYSMLPARTICIPANTPROPERTY;
-            else if (stereotype == stereotypeConstants.decision) elementType = SysmlConstants.SYSMLDECISIONNODE;
-            else if (stereotype == stereotypeConstants.domain) elementType = SysmlConstants.SYSMLBLOCK;
-            else if (stereotype == stereotypeConstants.objectStereotype) elementType = SysmlConstants.SYSMLOBJECT;
-            else if (stereotype == stereotypeConstants.constraintProperty) elementType = SysmlConstants.SYSMLCONSTRAINTPROPERTY;
-            else if (stereotype == stereotypeConstants.valueType) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
-            else if (stereotype == stereotypeConstants.flowProperty) elementType = SysmlConstants.SYSMLFLOWPROPERTY;
-            else if (stereotype == stereotypeConstants.constraintParameter) elementType = SysmlConstants.SYSMLCONSTRAINTPARAMETER;
-            else if (stereotype == stereotypeConstants.constraintBlock || stereotype == stereotypeConstants.constraintBlockCap) elementType = SysmlConstants.SYSMLCONSTRAINTBLOCK;
-            else if (stereotype == stereotypeConstants.classifierBehaviorProperty) elementType = SysmlConstants.SYSMLCLASSIFIERBEHAVIORPROPERTY;
-            else if (stereotype == stereotypeConstants.stereotype) elementType = SysmlConstants.SYSMLSTEREOTYPE;
-            else if (stereotype == stereotypeConstants.objectiveFunction) elementType = SysmlConstants.SYSMLOBJECTIVEFUNCTION;
-            else if (stereotype == stereotypeConstants.metaclass && type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLMETACLASS;
+            if (stereotype == StereotypeConstants.BLOCK) elementType = SysmlConstants.SYSMLBLOCK;
+            else if (stereotype == StereotypeConstants.HARDWARE) elementType = SysmlConstants.SYSMLBLOCK;
+            else if (stereotype == StereotypeConstants.BOUNDREFERENCE) elementType = SysmlConstants.SYSMLBOUNDREFERENCE;
+            else if (stereotype == StereotypeConstants.VALUEPROPERTY) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
+            else if (stereotype == StereotypeConstants.PARTICIPANTPROPERTY) elementType = SysmlConstants.SYSMLPARTICIPANTPROPERTY;
+            else if (stereotype == StereotypeConstants.DECISION) elementType = SysmlConstants.SYSMLDECISIONNODE;
+            else if (stereotype == StereotypeConstants.DOMAIN) elementType = SysmlConstants.SYSMLBLOCK;
+            else if (stereotype == StereotypeConstants.OBJECTSTEREOTYPE) elementType = SysmlConstants.SYSMLOBJECT;
+            else if (stereotype == StereotypeConstants.CONSTRAINTPROPERTY) elementType = SysmlConstants.SYSMLCONSTRAINTPROPERTY;
+            else if (stereotype == StereotypeConstants.VALUETYPE) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
+            else if (stereotype == StereotypeConstants.FLOWPROPERTY) elementType = SysmlConstants.SYSMLFLOWPROPERTY;
+            else if (stereotype == StereotypeConstants.CONSTRAINTPARAMETER) elementType = SysmlConstants.SYSMLCONSTRAINTPARAMETER;
+            else if (stereotype == StereotypeConstants.CONSTRAINTBLOCK || stereotype == StereotypeConstants.CONSTRAINTBLOCKCAP) elementType = SysmlConstants.SYSMLCONSTRAINTBLOCK;
+            else if (stereotype == StereotypeConstants.CLASSIFIERBEHAVIORPROPERTY) elementType = SysmlConstants.SYSMLCLASSIFIERBEHAVIORPROPERTY;
+            else if (stereotype == StereotypeConstants.STEREOTYPE) elementType = SysmlConstants.SYSMLSTEREOTYPE;
+            else if (stereotype == StereotypeConstants.OBJECTIVEFUNCTION) elementType = SysmlConstants.SYSMLOBJECTIVEFUNCTION;
+            else if (stereotype == StereotypeConstants.METACLASS && type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLMETACLASS;
             else if (stereotype == "" && type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLCLASS;
-            else if (stereotype != "" && stereotype != stereotypeConstants.metaclass && stereotype != stereotypeConstants.stereotype && stereotype != stereotypeConstants.interfaceBlock
-                        && stereotype != stereotypeConstants.domain && stereotype != stereotypeConstants.external && stereotype != stereotypeConstants.system && stereotype != stereotypeConstants.subsystem
-                        && stereotype != stereotypeConstants.systemContext && type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLCLASS;
-            else if (stereotype == stereotypeConstants.valueType && type != SysmlConstants.ENUMERATION) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
-            else if (stereotype == stereotypeConstants.valueType && type == SysmlConstants.ENUMERATION) elementType = SysmlConstants.SYSMLENUMERATION;
+            else if (stereotype != "" && stereotype != StereotypeConstants.METACLASS && stereotype != StereotypeConstants.STEREOTYPE && stereotype != StereotypeConstants.INTERFACEBLOCK
+                        && stereotype != StereotypeConstants.DOMAIN && stereotype != StereotypeConstants.EXTERNAL && stereotype != StereotypeConstants.SYSTEM && stereotype != StereotypeConstants.SUBSYSTEM
+                        && stereotype != StereotypeConstants.SYSTEMCONTEXT && type == SysmlConstants.CLASS) elementType = SysmlConstants.SYSMLCLASS;
+            else if (stereotype == StereotypeConstants.VALUETYPE && type != SysmlConstants.ENUMERATION) elementType = SysmlConstants.SYSMLVALUEPROPERTY;
+            else if (stereotype == StereotypeConstants.VALUETYPE && type == SysmlConstants.ENUMERATION) elementType = SysmlConstants.SYSMLENUMERATION;
             else if (type == SysmlConstants.ACTIVITY) elementType = SysmlConstants.SYSMLACTIVITY;
             else if (type == SysmlConstants.ACTIVITYPARAMETER) elementType = SysmlConstants.SYSMLACTIVITYPARAMETERNODE;
             else if (type == SysmlConstants.ACTIVITYPARTITION) elementType = SysmlConstants.SYSMLACTIVITYPARTITION;
@@ -1132,7 +1124,7 @@ namespace MTIP.Translations
             else if (type == SysmlConstants.EXITPOINT) elementType = SysmlConstants.SYSMLEXITPOINT;
             else if (type == SysmlConstants.SEQUENCE) elementType = SysmlConstants.SYSMLLIFELINE;
             else if (type == SysmlConstants.REGION) elementType = SysmlConstants.SYSMLREGION;
-            else if (type == SysmlConstants.REQUIREMENT && stereotype == stereotypeConstants.businessRequirement) elementType = SysmlConstants.SYSMLREQUIREMENT;
+            else if (type == SysmlConstants.REQUIREMENT && stereotype == StereotypeConstants.BUSINESSREQUIREMENT) elementType = SysmlConstants.SYSMLREQUIREMENT;
             else if (type == SysmlConstants.REQUIREMENT) elementType = SysmlConstants.SYSMLREQUIREMENT;
             else if (type == SysmlConstants.EXTENDEDREQUIREMENT) elementType = SysmlConstants.SYSMLEXTENDEDREQUIREMENT;
             else if (type == SysmlConstants.FUNCTIONALREQUIREMENT) elementType = SysmlConstants.SYSMLFUNCTIONALREQUIREMENT;
@@ -1148,24 +1140,24 @@ namespace MTIP.Translations
             else if (type == SysmlConstants.OBJECT) elementType = SysmlConstants.SYSMLOBJECT;
             else if (type == SysmlConstants.OBJECTNODE) elementType = SysmlConstants.SYSMLOBJECTNODE;
             else if (type == SysmlConstants.USECASE) elementType = SysmlConstants.SYSMLUSECASE;
-            else if (type == SysmlConstants.OBJECT && stereotype == stereotypeConstants.datastore) elementType = SysmlConstants.SYSMLDATASTORENODE;
-            else if (type == SysmlConstants.SYNCHRONIZATION && stereotype == stereotypeConstants.fork) elementType = SysmlConstants.SYSMLFORKNODE;
+            else if (type == SysmlConstants.OBJECT && stereotype == StereotypeConstants.DATASTORE) elementType = SysmlConstants.SYSMLDATASTORENODE;
+            else if (type == SysmlConstants.SYNCHRONIZATION && stereotype == StereotypeConstants.FORK) elementType = SysmlConstants.SYSMLFORKNODE;
             else if (type == SysmlConstants.PORT)
             {
-                if (stereotype == stereotypeConstants.flowPort) elementType = SysmlConstants.SYSMLFLOWPORT;
-                else if (stereotype == stereotypeConstants.fullPort) elementType = SysmlConstants.SYSMLFULLPORT;
-                else if (stereotype == stereotypeConstants.proxyPort) elementType = SysmlConstants.SYSMLPROXYPORT;
+                if (stereotype == StereotypeConstants.FLOWPORT) elementType = SysmlConstants.SYSMLFLOWPORT;
+                else if (stereotype == StereotypeConstants.FULLPORT) elementType = SysmlConstants.SYSMLFULLPORT;
+                else if (stereotype == StereotypeConstants.PROXYPORT) elementType = SysmlConstants.SYSMLPROXYPORT;
                 else
                 {
                     elementType = SysmlConstants.SYSMLPORT;
                 }
             }
-            else if (stereotype == stereotypeConstants.interfaceBlock) elementType = SysmlConstants.SYSMLINTERFACEBLOCK;
-            else if (type == SysmlConstants.INTERFACE && stereotype != stereotypeConstants.flowSpecification) elementType = SysmlConstants.SYSMLINTERFACE;
+            else if (stereotype == StereotypeConstants.INTERFACEBLOCK) elementType = SysmlConstants.SYSMLINTERFACEBLOCK;
+            else if (type == SysmlConstants.INTERFACE && stereotype != StereotypeConstants.FLOWSPECIFICATION) elementType = SysmlConstants.SYSMLINTERFACE;
             else if (type == SysmlConstants.ACTIVITYPARAMETER) elementType = SysmlConstants.SYSMLACTIVITYPARAMETER;
             else if (type == SysmlConstants.ARTIFACT) elementType = SysmlConstants.SYSMLARTIFACT;
             else if (type == SysmlConstants.TRIGGER) elementType = SysmlConstants.SYSMLTRIGGER;
-            else if (type == SysmlConstants.TEXT && stereotype == stereotypeConstants.navigationCell) elementType = SysmlConstants.EANAVIGATIONCELL;
+            else if (type == SysmlConstants.TEXT && stereotype == StereotypeConstants.NAVIGATIONCELL) elementType = SysmlConstants.EANAVIGATIONCELL;
             else if (type == SysmlConstants.TEXT) elementType = SysmlConstants.SYSMLTEXT;
             else if (type == SysmlConstants.NOTE) elementType = SysmlConstants.SYSMLNOTE;
             else if (type == SysmlConstants.STATENODE)
@@ -1189,19 +1181,19 @@ namespace MTIP.Translations
             else if (type == SysmlConstants.PART)
             {
                 if (stereotype == "") elementType = SysmlConstants.SYSMLPARTPROPERTY;
-                else if (stereotype == stereotypeConstants.partProperty) elementType = SysmlConstants.SYSMLPARTPROPERTY;
-                else if (stereotype == stereotypeConstants.property) elementType = SysmlConstants.SYSMLPARTPROPERTY;
-                else if (stereotype == stereotypeConstants.constraintProperty) elementType = SysmlConstants.SYSMLCONSTRAINTPROPERTY;
-                else if (stereotype == stereotypeConstants.classification) elementType = SysmlConstants.SYSMLCLASSIFICATION;
+                else if (stereotype == StereotypeConstants.PARTPROPERTY) elementType = SysmlConstants.SYSMLPARTPROPERTY;
+                else if (stereotype == StereotypeConstants.PROPERTY) elementType = SysmlConstants.SYSMLPARTPROPERTY;
+                else if (stereotype == StereotypeConstants.CONSTRAINTPROPERTY) elementType = SysmlConstants.SYSMLCONSTRAINTPROPERTY;
+                else if (stereotype == StereotypeConstants.CLASSIFICATION) elementType = SysmlConstants.SYSMLCLASSIFICATION;
 
             }
             else if (type == SysmlConstants.REQUIREDINTERFACE) elementType = SysmlConstants.SYSMLREQUIREDINTERFACE;
             else if (type == SysmlConstants.NOTE) elementType = SysmlConstants.SYSMLNOTE;
             else if (type == SysmlConstants.PACKAGE) elementType = SysmlConstants.SYSMLPACKAGE;
-            else if (stereotype == stereotypeConstants.allocated || type == SysmlConstants.ACTION || type == SysmlConstants.ACTIVITYPARAMETER ||
+            else if (stereotype == StereotypeConstants.ALLOCATED || type == SysmlConstants.ACTION || type == SysmlConstants.ACTIVITYPARAMETER ||
                             type == SysmlConstants.ACTIONPIN || type == SysmlConstants.EVENT)
             {
-                if (stereotype == stereotypeConstants.allocated) elementType = SysmlConstants.SYSMLALLOCATED;
+                if (stereotype == StereotypeConstants.ALLOCATED) elementType = SysmlConstants.SYSMLALLOCATED;
                 else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.acceptEventAction) elementType = SysmlConstants.SYSMLACCEPTEVENTACTION;
                 else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.callBehaviorAction) elementType = SysmlConstants.SYSMLCALLBEHAVIORACTION;
                 else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.createObjectAction) elementType = SysmlConstants.SYSMLCREATEOBJECTACTION;
@@ -1211,8 +1203,8 @@ namespace MTIP.Translations
                 else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.sendSignalAction) elementType = SysmlConstants.SYSMLSENDSIGNALACTION;
                 else if (type == SysmlConstants.ACTION) elementType = SysmlConstants.SYSMLACTION;
                 else if (type == SysmlConstants.ACTIVITYPARAMETER) elementType = SysmlConstants.SYSMLACTIVITYPARAMETER;
-                else if (type == SysmlConstants.ACTIONPIN && (stereotype == stereotypeConstants.output || metatype == MetatypeConstants.outputPin)) elementType = SysmlConstants.SYSMLOUTPUTPIN;
-                else if (type == SysmlConstants.ACTIONPIN && (stereotype == stereotypeConstants.input || metatype == MetatypeConstants.inputPin)) elementType = SysmlConstants.SYSMLINPUTPIN;
+                else if (type == SysmlConstants.ACTIONPIN && (stereotype == StereotypeConstants.OUTPUT || metatype == MetatypeConstants.outputPin)) elementType = SysmlConstants.SYSMLOUTPUTPIN;
+                else if (type == SysmlConstants.ACTIONPIN && (stereotype == StereotypeConstants.INPUT || metatype == MetatypeConstants.inputPin)) elementType = SysmlConstants.SYSMLINPUTPIN;
                 else if (type == SysmlConstants.ACTIONPIN) elementType = SysmlConstants.SYSMLACTIONPIN;
                 else if (type == SysmlConstants.EVENT)
                 {
@@ -1224,13 +1216,13 @@ namespace MTIP.Translations
             else if (type == SysmlConstants.MERGENODE) elementType = SysmlConstants.SYSMLMERGENODE;
             else if (type == SysmlConstants.SYNCHRONIZATION)
             {
-                if (stereotype == stereotypeConstants.join) elementType = SysmlConstants.SYSMLJOIN;
-                else if (stereotype == stereotypeConstants.fork) elementType = SysmlConstants.SYSMLFORK;
+                if (stereotype == StereotypeConstants.JOIN) elementType = SysmlConstants.SYSMLJOIN;
+                else if (stereotype == StereotypeConstants.FORK) elementType = SysmlConstants.SYSMLFORK;
                 else elementType = SysmlConstants.SYSMLSYNCHRONIZATION;
             }
             else if (type == SysmlConstants.INTERRUPTIBLEACTIVITYREGION) elementType = SysmlConstants.SYSMLINTERRUPTIBLEACTIVITYREGION;
-            else if (stereotype == stereotypeConstants.flowSpecification) elementType = SysmlConstants.SYSMLFLOWSPECIFICATION;
-            else if (stereotype == stereotypeConstants.external || stereotype == stereotypeConstants.subsystem || stereotype == stereotypeConstants.system || stereotype == stereotypeConstants.systemContext) elementType = SysmlConstants.SYSMLBLOCK;
+            else if (stereotype == StereotypeConstants.FLOWSPECIFICATION) elementType = SysmlConstants.SYSMLFLOWSPECIFICATION;
+            else if (stereotype == StereotypeConstants.EXTERNAL || stereotype == StereotypeConstants.SUBSYSTEM || stereotype == StereotypeConstants.SYSTEM || stereotype == StereotypeConstants.SYSTEMCONTEXT) elementType = SysmlConstants.SYSMLBLOCK;
             return elementType;
         }
         public string GetDiagramSysMLType(EA.Diagram diagram)

@@ -8,103 +8,51 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class StereotypeConstants
+    public static class StereotypeConstants
     {
-        // Block Stereotypes
-        public string adjunctProperty;
-        public string allocated;
-        public string block;
-        public string boundReference;
-        public string businessRequirement;
-        public string classification;
-        public string classifierBehaviorProperty;
-        public string constraintBlock;
-        public string constraintBlockCap;
-        public string constraintParameter;
-        public string constraintProperty;
-        public string datastore;
-        public string decision;
-        public string domain;
-        public string external;
-        public string flowPort;
-        public string flowProperty;
-        public string flowSpecification;
-        public string fork;
-        public string fullPort;
-        public string hardware;
-        public string input;
-        public string interfaceBlock;
-        public string join;
-        public string metaclass;
-        public string model;
-        public string navigationCell;
-        public string objectiveFunction;
-        public string objectStereotype;
-        public string output;
-        public string participantProperty;
-        public string partProperty;
-        public string profile;
-        public string property;
-        public string proxyPort;
-        public string stereotype;
-        public string subsystem;
-        public string system;
-        public string systemContext;
-        public string valueProperty;
-        public string valueType;
-        public StereotypeConstants()
-        {
-            //Block Stereotypes
-            constraintBlock = "constraintBlock";
-            constraintBlockCap = "ConstraintBlock";
-            input = "input";
-            output = "output";
-            navigationCell = "NavigationCell";
-            stereotype = "stereotype";
-            metaclass = "metaclass";
-            valueType = "ValueType";
-            property = "property";
-            datastore = "datastore";
-            block = "block";
-            hardware = "hardware";
-            boundReference = "BoundReference";
-            valueProperty = "ValueProperty";
-            participantProperty = "participantProperty";
-            decision = "Decision";
-            domain = "Domain";
-            objectStereotype = "Object";
-            constraintProperty = "constraintProperty";
-            flowProperty = "FlowProperty";
-            constraintParameter = "ConstraintParameter";
-            classifierBehaviorProperty = "ClassifierBehaviorProperty";
-            objectiveFunction = "objectiveFunction";
-            interfaceBlock = "InterfaceBlock";
-            system = "System";
-            subsystem = "Subsystem";
-            systemContext = "System context";
-            businessRequirement = "BusinessRequirement";
-            fork = "Fork";
-            flowPort = "FlowPort";
-            fullPort = "FullPort";
-            proxyPort = "ProxyPort";
-            flowSpecification = "flowSpecification";
-            partProperty = "PartProperty";
-            property = "property";
-            classification = "Classification";
-            allocated = "allocated";
-            join = "Join";
-            external = "External";
-            model = "model";
-            profile = "profile";
-            adjunctProperty = "AdjunctProperty";
-        }
+        //Block Stereotypes
+        public const string CONSTRAINTBLOCK = "constraintBlock";
+        public const string CONSTRAINTBLOCKCAP = "ConstraintBlock";
+        public const string INPUT = "input";
+        public const string OUTPUT = "output";
+        public const string NAVIGATIONCELL = "NavigationCell";
+        public const string STEREOTYPE = "stereotype";
+        public const string METACLASS = "metaclass";
+        public const string VALUETYPE = "ValueType";
+        public const string PROPERTY = "property";
+        public const string DATASTORE = "datastore";
+        public const string BLOCK = "block";
+        public const string HARDWARE = "hardware";
+        public const string BOUNDREFERENCE = "BoundReference";
+        public const string VALUEPROPERTY = "ValueProperty";
+        public const string PARTICIPANTPROPERTY = "participantProperty";
+        public const string DECISION = "Decision";
+        public const string DOMAIN = "Domain";
+        public const string OBJECTSTEREOTYPE = "Object";
+        public const string CONSTRAINTPROPERTY = "constraintProperty";
+        public const string FLOWPROPERTY = "FlowProperty";
+        public const string CONSTRAINTPARAMETER = "ConstraintParameter";
+        public const string CLASSIFIERBEHAVIORPROPERTY = "ClassifierBehaviorProperty";
+        public const string OBJECTIVEFUNCTION = "objectiveFunction";
+        public const string INTERFACEBLOCK = "InterfaceBlock";
+        public const string SYSTEM = "System";
+        public const string SUBSYSTEM = "Subsystem";
+        public const string SYSTEMCONTEXT = "System context";
+        public const string BUSINESSREQUIREMENT = "BusinessRequirement";
+        public const string FORK = "Fork";
+        public const string FLOWPORT = "FlowPort";
+        public const string FULLPORT = "FullPort";
+        public const string PROXYPORT = "ProxyPort";
+        public const string FLOWSPECIFICATION = "flowSpecification";
+        public const string PARTPROPERTY = "PartProperty";
+        public const string CLASSIFICATION = "Classification";
+        public const string ALLOCATED = "allocated";
+        public const string JOIN = "Join";
+        public const string EXTERNAL = "External";
+        public const string MODEL = "model";
+        public const string PROFILE = "profile";
+        public const string ADJUNCTPROPERTY = "AdjunctProperty";
     }
 }
