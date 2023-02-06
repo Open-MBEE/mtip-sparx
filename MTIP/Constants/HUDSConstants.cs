@@ -7,58 +7,30 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class HUDSConstants
+    public static class HUDSConstants
     {
-        public string attributes;
-        public string data;
-        public string dict;
-        public string dtype;
-        public string ea;
-        public string unified;
-        public string element;
-        public string id;
-        public string intType;
-        public string isComposite;
-        public string key;
-        public string list;
-        public string name;
-        public string relationshipMetadata;
-        public string relationships;
-        public string status;
-        public string str;
-        public string type;
-        public string typedBy;
-        public string value;
-        public HUDSConstants()
-        {
-            attributes = "attributes";
-            data = "data";
-            dict = "dict";
-            dtype = "_dtype";
-            ea = "ea";
-            unified = "unified";
-            element = "element";
-            id = "id";
-            intType = "int";
-            isComposite = "isComposite";
-            key = "key";
-            list = "list";
-            name = "name";
-            relationshipMetadata = "relationship_metadata";
-            relationships = "relationships";
-            status = "status";
-            str = "str";
-            type = "type";
-            typedBy = "typedBy";
-            value = "value";
-        }
+        public const string ATTRIBUTES = "attributes";
+        public const string DATA = "data";
+        public const string DICT = "dict";
+        public const string DTYPE = "_dtype";
+        public const string EA = "ea";
+        public const string UNIFIED = "unified";
+        public const string ELEMENT = "element";
+        public const string ID = "id";
+        public const string INTTYPE = "int";
+        public const string ISCOMPOSITE = "isComposite";
+        public const string KEY = "key";
+        public const string LIST = "list";
+        public const string NAME = "name";
+        public const string RELATIONSHIPMETADATA = "relationship_metadata";
+        public const string RELATIONSHIPS = "relationships";
+        public const string STATUS = "status";
+        public const string STR = "str";
+        public const string TYPE = "type";
+        public const string TYPEDBY = "typedBy";
+        public const string VALUE = "value";
     }
 }
+

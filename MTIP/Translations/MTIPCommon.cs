@@ -5,27 +5,22 @@ namespace MTIP.Translations
 {
     internal static class MTIPCommon
     {
-        //DS: Not the way I would do this.
-        
-        public static RelationshipConstants relationshipConstants = new RelationshipConstants();
-        public static HUDSConstants hudsConstants =new HUDSConstants();
-
         internal static XmlElement CreateIdElement(XmlDocument xmlDocument, string eaElementGuid)
         {
 
             XmlElement idElement = xmlDocument.CreateElement(AttributeConstants.ID);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
+            idElement.SetAttribute(HUDSConstants.DTYPE, HUDSConstants.DICT);
 
             //unified ID shall be the new Vendor independed ID field for cross tool roundtrips.
-            XmlElement unifiedIdElement = xmlDocument.CreateElement(hudsConstants.unified);
-            unifiedIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
+            XmlElement unifiedIdElement = xmlDocument.CreateElement(HUDSConstants.UNIFIED);
+            unifiedIdElement.SetAttribute(HUDSConstants.DTYPE, HUDSConstants.STR);
             unifiedIdElement.InnerText = eaElementGuid.ToString();
 
             idElement.AppendChild(unifiedIdElement);
 
             //unified ID shall be the new Vendor specific ID field for cross tool roundtrips, best case this is not required going forward
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
+            XmlElement eaIdElement = xmlDocument.CreateElement(HUDSConstants.EA);
+            eaIdElement.SetAttribute(HUDSConstants.DTYPE, HUDSConstants.STR);
             eaIdElement.InnerText = eaElementGuid.ToString();
 
             idElement.AppendChild(eaIdElement);

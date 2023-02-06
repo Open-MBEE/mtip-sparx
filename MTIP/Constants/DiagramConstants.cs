@@ -15,30 +15,18 @@ using System.Threading.Tasks;
 
 namespace MTIP.Constants
 {
-    public class DiagramConstants
+    public static class DiagramConstants
     {
-        public string activity;
-        public string classType;
-        public string component;
-        public string compositeStructure;
-        public string custom;
-        public string logical;
-        public string package;
-        public string sequence;
-        public string statechart;
-        public string useCase;
-        public DiagramConstants()
-        {
-            activity = "Activity";
-            classType = "Class";
-            component = "Component";
-            compositeStructure = "CompositeStructure";
-            custom = "Custom";
-            logical = "Logical";
-            package = "Package";
-            sequence = "Sequence";
-            statechart = "Statechart";
-            useCase = "Use Case";
-        }
+        public const string activity = "Activity";
+        public const string classType = "Class";
+        public const string component = "Component";
+        public const string compositeStructure = "CompositeStructure";
+        public const string custom = "Custom";
+        public const string logical = "Logical";
+        public const string package = "Package";
+        public const string sequence = "Sequence";
+        public const string statechart = "Statechart";
+        public const string useCase = "Use Case";
     }
+
 }

@@ -7,32 +7,17 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class RequirementConstants
+    public static class RequirementConstants
     {
-        public string designConstraint;
-        public string extendedRequirement;
-        public string functionalRequirement;
-        public string interfaceRequirement;
-        public string performanceRequirement;
-        public string physicalRequirement;
-        public string requirement;
-        public RequirementConstants()
-        {
-            designConstraint = "DesignConstraint";
-            extendedRequirement = "ExtendedRequirement";
-            functionalRequirement = "FunctionalRequirement";
-            interfaceRequirement = "InterfaceRequirement";
-            performanceRequirement = "PerformanceRequirement";
-            physicalRequirement = "PhysicalRequirement";
-            requirement = "Requirement";
-        }
+        public const string DESIGNCONSTRAINT = "DesignConstraint";
+        public const string EXTENDEDREQUIREMENT = "ExtendedRequirement";
+        public const string FUNCTIONALREQUIREMENT = "FunctionalRequirement";
+        public const string INTERFACEREQUIREMENT = "InterfaceRequirement";
+        public const string PERFORMANCEREQUIREMENT = "PerformanceRequirement";
+        public const string PHYSICALREQUIREMENT = "PhysicalRequirement";
+        public const string REQUIREMENT = "Requirement";
     }
 }
+

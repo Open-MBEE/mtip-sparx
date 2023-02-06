@@ -215,7 +215,7 @@ namespace MTIP.Translations
         // Begin building model
         internal void BuildModel(EA.Package rootPkg)
         {
-            ModelConstants modelConstants = new ModelConstants();
+            
             try
             {
                 if (terms.Count > 0)
@@ -234,28 +234,28 @@ namespace MTIP.Translations
                     if (headModelItem.GetName() == "")
                     {
                         name = "Model";
-                        headModelItem.AddAttribute(modelConstants.stereotype, modelConstants.model);
+                        headModelItem.AddAttribute(ModelConstants.STEREOTYPE, ModelConstants.MODEL);
                     }
                     else name = headModelItem.GetName();
                     EA.Package modelPkg = rootPkg.Packages.AddNew(name, "");
                     modelPkg.Update();
 
-                    if (headModelItem.GetAttributes().ContainsKey(modelConstants.stereotype) && headModelItem.GetAttribute(modelConstants.stereotype) == modelConstants.model)
+                    if (headModelItem.GetAttributes().ContainsKey(ModelConstants.STEREOTYPE) && headModelItem.GetAttribute(ModelConstants.STEREOTYPE) == ModelConstants.MODEL)
                     {
-                        modelPkg.Element.Stereotype = modelConstants.model;
+                        modelPkg.Element.Stereotype = ModelConstants.MODEL;
                     }
-                    if (headModelItem.GetAttributes().ContainsKey(modelConstants.stereotype) && headModelItem.GetAttribute(modelConstants.stereotype) == modelConstants.profile)
+                    if (headModelItem.GetAttributes().ContainsKey(ModelConstants.STEREOTYPE) && headModelItem.GetAttribute(ModelConstants.STEREOTYPE) == ModelConstants.PROFILE)
                     {
-                        modelPkg.Element.Stereotype = modelConstants.profile;
+                        modelPkg.Element.Stereotype = ModelConstants.PROFILE;
                     }
                     string notes = "";
-                    if (headModelItem.GetAttributes().ContainsKey(modelConstants.documentation))
+                    if (headModelItem.GetAttributes().ContainsKey(ModelConstants.DOCUMENTATION))
                     {
-                        notes += headModelItem.GetAttribute(modelConstants.documentation);
+                        notes += headModelItem.GetAttribute(ModelConstants.DOCUMENTATION);
                     }
-                    if (headModelItem.GetAttributes().ContainsKey(modelConstants.text))
+                    if (headModelItem.GetAttributes().ContainsKey(ModelConstants.TEXT))
                     {
-                        notes = " - " + headModelItem.GetAttribute(modelConstants.text);
+                        notes = " - " + headModelItem.GetAttribute(ModelConstants.TEXT);
                     }
                     modelPkg.Notes = notes;
                     modelPkg.Update();
@@ -489,19 +489,18 @@ namespace MTIP.Translations
         }
         internal XmlItem GetRelationships(XmlNode fieldNode, XmlItem modelElement)
         {
-            RelationshipConstants relConstants = new RelationshipConstants();
             foreach (XmlNode relationship in fieldNode)
             {
                 try
                 {
-                    if (relationship.Name == relConstants.hasParent)
+                    if (relationship.Name == RelationshipConstants.HASPARENT)
                     {
                         foreach (XmlNode hasParent in relationship)
                         {
-                            if (hasParent.Name == relConstants.id) modelElement.SetParent(hasParent.InnerText);
+                            if (hasParent.Name == RelationshipConstants.ID) modelElement.SetParent(hasParent.InnerText);
                         }
                     }
-                    if (relationship.Name == relConstants.element)
+                    if (relationship.Name == RelationshipConstants.ELEMENT)
                     {
                         foreach (XmlNode element in relationship)
                         {
@@ -509,19 +508,19 @@ namespace MTIP.Translations
                             DiagramObjectItem diagramObject = new DiagramObjectItem();
                             foreach (XmlNode elementItem in element)
                             {
-                                if (elementItem.Name == relConstants.id)
+                                if (elementItem.Name == RelationshipConstants.ID)
                                 {
                                     diagramObject.SetMappingId(elementItem.InnerText);
                                 }
-                                if (elementItem.Name == relConstants.relMetadata)
+                                if (elementItem.Name == RelationshipConstants.RELMETADATA)
                                 {
                                     foreach (XmlNode metadata in elementItem)
                                     {
-                                        if (metadata.Name == relConstants.relMetadataTop) diagramObject.SetTopCoor(metadata.InnerText);
-                                        if (metadata.Name == relConstants.relMetadataLeft) diagramObject.SetLeftCoor(metadata.InnerText);
-                                        if (metadata.Name == relConstants.relMetadataBottom) diagramObject.SetBottomCoor(metadata.InnerText);
-                                        if (metadata.Name == relConstants.relMetadataRight) diagramObject.SetRightCoor(metadata.InnerText);
-                                        if (metadata.Name == relConstants.relMetadataSeq) diagramObject.SetSequenceCoor(metadata.InnerText);
+                                        if (metadata.Name == RelationshipConstants.RELMETADATATOP) diagramObject.SetTopCoor(metadata.InnerText);
+                                        if (metadata.Name == RelationshipConstants.RELMETADATALEFT) diagramObject.SetLeftCoor(metadata.InnerText);
+                                        if (metadata.Name == RelationshipConstants.RELMETADATABOTTOM) diagramObject.SetBottomCoor(metadata.InnerText);
+                                        if (metadata.Name == RelationshipConstants.RELMETADATARIGHT) diagramObject.SetRightCoor(metadata.InnerText);
+                                        if (metadata.Name == RelationshipConstants.RELMETADATASEQ) diagramObject.SetSequenceCoor(metadata.InnerText);
                                     }
                                 }
 
@@ -529,19 +528,19 @@ namespace MTIP.Translations
                             modelElement.AddDiagramObjects(diagramObject);
                         }
                     }
-                    if (relationship.Name == relConstants.diagramConnector)
+                    if (relationship.Name == RelationshipConstants.DIAGRAMCONNECTOR)
                     {
                         foreach (XmlNode diagramLinkElem in relationship)
                         {
                             DiagramLinkItem diagramLink = new DiagramLinkItem();
                             foreach (XmlNode diagramConnElem in diagramLinkElem)
                             {
-                                if (diagramConnElem.Name == relConstants.id) diagramLink.SetMappingId(diagramConnElem.InnerText);
-                                if (diagramConnElem.Name == relConstants.relMetadata)
+                                if (diagramConnElem.Name == RelationshipConstants.ID) diagramLink.SetMappingId(diagramConnElem.InnerText);
+                                if (diagramConnElem.Name == RelationshipConstants.RELMETADATA)
                                 {
                                     foreach (XmlNode relMetadata in diagramConnElem)
                                     {
-                                        if (relMetadata.Name == relConstants.messageNumber) diagramLink.SetSequence(relMetadata.InnerText);
+                                        if (relMetadata.Name == RelationshipConstants.MESSAGENUMBER) diagramLink.SetSequence(relMetadata.InnerText);
                                     }
 
                                 }
@@ -550,50 +549,50 @@ namespace MTIP.Translations
                         }
 
                     }
-                    if (relationship.Name == relConstants.typedBy)
+                    if (relationship.Name == RelationshipConstants.TYPEDBY)
                     {
-                        foreach (XmlNode typedBy in relationship) if (typedBy.Name == relConstants.id) modelElement.SetTypedBy(typedBy.InnerText);
+                        foreach (XmlNode typedBy in relationship) if (typedBy.Name == RelationshipConstants.ID) modelElement.SetTypedBy(typedBy.InnerText);
                     }
-                    if (relationship.Name == relConstants.classifiedBy)
+                    if (relationship.Name == RelationshipConstants.CLASSIFIEDBY)
                     {
-                        foreach (XmlNode classifiedBy in relationship) if (classifiedBy.Name == relConstants.id) modelElement.SetClassifiedBy(classifiedBy.InnerText);
+                        foreach (XmlNode classifiedBy in relationship) if (classifiedBy.Name == RelationshipConstants.ID) modelElement.SetClassifiedBy(classifiedBy.InnerText);
                     }
-                    if (relationship.Name == relConstants.valueSpecification)
+                    if (relationship.Name == RelationshipConstants.VALUESPECIFICATION)
                     {
-                        foreach (XmlNode valueSpecification in relationship) if (valueSpecification.Name == relConstants.id) modelElement.SetValueSpecification(valueSpecification.InnerText);
+                        foreach (XmlNode valueSpecification in relationship) if (valueSpecification.Name == RelationshipConstants.ID) modelElement.SetValueSpecification(valueSpecification.InnerText);
                     }
-                    if (relationship.Name == relConstants.client)
+                    if (relationship.Name == RelationshipConstants.CLIENT)
                     {
-                        foreach (XmlNode client in relationship) if (client.Name == relConstants.id) modelElement.SetClient(client.InnerText);
+                        foreach (XmlNode client in relationship) if (client.Name == RelationshipConstants.ID) modelElement.SetClient(client.InnerText);
                     }
-                    if (relationship.Name == relConstants.supplier)
+                    if (relationship.Name == RelationshipConstants.SUPPLIER)
                     {
-                        foreach (XmlNode supplier in relationship) if (supplier.Name == relConstants.id) modelElement.SetSupplier(supplier.InnerText);
+                        foreach (XmlNode supplier in relationship) if (supplier.Name == RelationshipConstants.ID) modelElement.SetSupplier(supplier.InnerText);
                     }
-                    if (relationship.Name == relConstants.compositeDiagram)
+                    if (relationship.Name == RelationshipConstants.COMPOSITEDIAGRAM)
                     {
-                        foreach (XmlNode compositeDiagram in relationship) if (compositeDiagram.Name == relConstants.id) modelElement.SetCompositeDiagram(compositeDiagram.InnerText);
+                        foreach (XmlNode compositeDiagram in relationship) if (compositeDiagram.Name == RelationshipConstants.ID) modelElement.SetCompositeDiagram(compositeDiagram.InnerText);
                         compositeDiagramsToAdd.Add(modelElement.GetMappingID(), modelElement);
                     }
-                    if (relationship.Name == relConstants.signature)
+                    if (relationship.Name == RelationshipConstants.SIGNATURE)
                     {
-                        foreach (XmlNode signal in relationship) if (signal.Name == relConstants.id) modelElement.SetSignal(signal.InnerText);
+                        foreach (XmlNode signal in relationship) if (signal.Name == RelationshipConstants.ID) modelElement.SetSignal(signal.InnerText);
 
                     }
-                    if (relationship.Name == relConstants.profile)
+                    if (relationship.Name == RelationshipConstants.PROFILE)
                     {
                         foreach (XmlNode profile in relationship)
                         {
-                            if (profile.Name == relConstants.id) modelElement.SetProfileId(profile.InnerText);
-                            if (profile.Name == relConstants.profile) modelElement.SetProfile(profile.InnerText);
+                            if (profile.Name == RelationshipConstants.ID) modelElement.SetProfileId(profile.InnerText);
+                            if (profile.Name == RelationshipConstants.PROFILE) modelElement.SetProfile(profile.InnerText);
                         }
                     }
-                    if (relationship.Name == relConstants.hyperlink)
+                    if (relationship.Name == RelationshipConstants.HYPERLINK)
                     {
                         foreach (XmlNode hyperlink in relationship)
                         {
-                            if (hyperlink.Name == relConstants.id) modelElement.SetHyperlink(hyperlink.InnerText);
-                            if (hyperlink.Name == relConstants.type) modelElement.SetHyperlinkType(hyperlink.InnerText);
+                            if (hyperlink.Name == RelationshipConstants.ID) modelElement.SetHyperlink(hyperlink.InnerText);
+                            if (hyperlink.Name == RelationshipConstants.TYPE) modelElement.SetHyperlinkType(hyperlink.InnerText);
                         }
                     }
                 }
@@ -751,10 +750,6 @@ namespace MTIP.Translations
         internal void GetElement(EA.Element childElement, XmlItem childItem, string childId, string parentType)
         {
             StereotypeConstants stereotypeConstants = new StereotypeConstants();
-            MetatypeConstants metatypeConstants = new MetatypeConstants();
-            ProfileConstants profileConstants = new ProfileConstants();
-            
-
             if (childElement.Type == SysmlConstants.STATENODE)
             {
                 if (childItem.GetElementType() == SysmlConstants.INITIALPSEUDOSTATE) childElement.Subtype = 3;
@@ -768,7 +763,7 @@ namespace MTIP.Translations
                 if (childItem.GetElementType() == SysmlConstants.ACTIVITYINITIALNODE) childElement.Subtype = 100;
                 if (childItem.GetElementType() == SysmlConstants.ACTIVITYFINALNODE) childElement.Subtype = 101;
                 if (childItem.GetElementType() == SysmlConstants.FLOWFINALNODE) childElement.Subtype = 102;
-                childElement.MetaType = metatypeConstants.pseudostate;
+                childElement.MetaType = MetatypeConstants.pseudostate;
             }
             if (childElement.Type == SysmlConstants.ACTION)
             {
@@ -999,8 +994,6 @@ namespace MTIP.Translations
         {
             foreach (KeyValuePair<string, XmlItem> relationshipItem in relationshipElements)
             {
-                
-                RelationshipConstants relationshipConstants = new RelationshipConstants();
                 try
                 {
                     if (parsedXml.ContainsKey(relationshipItem.Value.GetSupplier()) && parsedXml.ContainsKey(relationshipItem.Value.GetClient()))
@@ -1032,7 +1025,7 @@ namespace MTIP.Translations
 
                                 if (relationshipItem.Value.GetAttributes().ContainsKey(AttributeConstants.MESSAGESORT))
                                 {
-                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.asynchSignal)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == RelationshipConstants.ASYNCHSIGNAL)
                                     {
                                         associationConnector.TransitionEvent = "Asynchronous";
                                         associationConnector.TransitionAction = "Signal";
@@ -1043,7 +1036,7 @@ namespace MTIP.Translations
                                         if (relationshipItem.Value.GetSignal() != "")
                                         {
                                             string signal = parsedXml[relationshipItem.Value.GetSignal()].GetEAID();
-                                            EA.ConnectorTag tag = associationConnector.TaggedValues.AddNew(relationshipConstants.signalGuid, signal);
+                                            EA.ConnectorTag tag = associationConnector.TaggedValues.AddNew(RelationshipConstants.SIGNALGUID, signal);
                                             //tag.Name = "signal_guid";
                                             //tag.Value = signal;
                                             tag.Update();
@@ -1051,14 +1044,14 @@ namespace MTIP.Translations
                                             associationConnector.Update();
                                         }
                                     }
-                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.asynchCall)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == RelationshipConstants.ASYNCHCALL)
                                     {
                                         associationConnector.TransitionEvent = "Asynchronous";
                                         associationConnector.TransitionAction = "Call";
                                         associationConnector.SupplierID = supplierElement.ElementID;
                                         associationConnector.ClientID = clientElement.ElementID;
                                     }
-                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.synchCall)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == RelationshipConstants.SYNCHCALL)
                                     {
                                         associationConnector.TransitionEvent = "Synchronous";
                                         associationConnector.TransitionAction = "Call";
@@ -1066,7 +1059,7 @@ namespace MTIP.Translations
                                         associationConnector.ClientID = clientElement.ElementID;
                                     }
 
-                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.reply)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == RelationshipConstants.REPLY)
                                     {
                                         associationConnector.TransitionEvent = "Synchronous";
                                         associationConnector.TransitionAction = "Call";
@@ -1113,21 +1106,21 @@ namespace MTIP.Translations
                                         meta_con.Value = meta_ster;
                                         meta_con.Update();
                                     }
-                                    else if (stereotype == relationshipConstants.metarelationship)
+                                    else if (stereotype == RelationshipConstants.METARELATIONSHIP)
                                     {
-                                        string meta_ster = relationshipItem.Value.GetAttribute(relationshipConstants.metarelationship);
-                                        ConnectorTag meta_con = associationConnector.TaggedValues.GetByName(relationshipConstants.metaclass);
+                                        string meta_ster = relationshipItem.Value.GetAttribute(RelationshipConstants.METARELATIONSHIP);
+                                        ConnectorTag meta_con = associationConnector.TaggedValues.GetByName(RelationshipConstants.METACLASS);
                                         meta_con.Value = meta_ster;
                                         meta_con.Update();
                                     }
                                 }
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(relationshipConstants.guard))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(RelationshipConstants.GUARD))
                                 {
-                                    associationConnector.TransitionGuard = relationshipItem.Value.GetAttribute(relationshipConstants.guard);
+                                    associationConnector.TransitionGuard = relationshipItem.Value.GetAttribute(RelationshipConstants.GUARD);
                                 }
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(relationshipConstants.effect))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(RelationshipConstants.EFFECT))
                                 {
-                                    associationConnector.TransitionAction = relationshipItem.Value.GetAttribute(relationshipConstants.effect);
+                                    associationConnector.TransitionAction = relationshipItem.Value.GetAttribute(RelationshipConstants.EFFECT);
                                 }
                                 if (relationshipItem.Value.GetElementType() == SysmlConstants.COMPOSITION)
                                 {
@@ -1521,15 +1514,15 @@ namespace MTIP.Translations
         internal EA.Diagram GetDiagram(XmlItem parentItem, KeyValuePair<string, XmlItem> diagramItem)
         {
             
-            DiagramConstants diagramConstants = new DiagramConstants();
+            
             EA.Package pkg = repository.GetPackageByID(1);
-            EA.Diagram relationshipDiagram = repository.GetPackageByID(1).Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.component); ;
+            EA.Diagram relationshipDiagram = repository.GetPackageByID(1).Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.component); ;
             if (parentItem.GetElementType() == SysmlConstants.PACKAGE || parentItem.GetElementType() == SysmlConstants.PROFILE || parentItem.GetElementType() == SysmlConstants.MODEL)
             {
                 EA.Package parentPkg = repository.GetPackageByGuid(parentItem.GetEAID());
                 if (diagramItem.Value.GetElementType() == SysmlConstants.ACT)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.activity);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.activity);
                     relationshipDiagram.MetaType = "SysML1.4::Activity";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1537,7 +1530,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.BDD)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.logical);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.logical);
                     relationshipDiagram.MetaType = "SysML1.4::BlockDefinition";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1545,14 +1538,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.CLASS)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.classType);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.classType);
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.IBD)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::InternalBlock";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1560,14 +1553,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PACKAGE)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.package);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.package);
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PAR)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::Parametric";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1575,7 +1568,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.REQ)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.custom);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.custom);
                     relationshipDiagram.MetaType = "SysML1.4::Requirement";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1583,7 +1576,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.SEQ)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.sequence);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.sequence);
                     relationshipDiagram.MetaType = "SysML1.4::Sequence";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1591,7 +1584,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.STM)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.statechart);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.statechart);
                     relationshipDiagram.MetaType = "SysML1.4::StateMachine";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1599,7 +1592,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.UC)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.useCase);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.useCase);
                     relationshipDiagram.MetaType = "SysML1.4::UseCase";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1609,9 +1602,9 @@ namespace MTIP.Translations
             else if (parentItem.GetCategory() == SysmlConstants.ELEMENT)
             {
                 EA.Element parentElement = repository.GetElementByGuid(parentItem.GetEAID());
-                if (diagramItem.Value.GetElementType() == SysmlConstants.ACT && parentItem.GetEAID() != diagramConstants.activity)
+                if (diagramItem.Value.GetElementType() == SysmlConstants.ACT && parentItem.GetEAID() != DiagramConstants.activity)
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.activity);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.activity);
                     relationshipDiagram.MetaType = "SysML1.4::Activity";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1620,7 +1613,7 @@ namespace MTIP.Translations
 
                 if (diagramItem.Value.GetElementType() == SysmlConstants.BDD && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.logical);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.logical);
                     relationshipDiagram.MetaType = "SysML1.4::BlockDefinition";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1628,14 +1621,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.CLASS && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.classType);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.classType);
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.IBD && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::InternalBlock";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1643,14 +1636,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PACKAGE && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.package);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.package);
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PAR && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::Parametric";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1658,7 +1651,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.REQ)
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.custom);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.custom);
                     relationshipDiagram.MetaType = "SysML1.4::Requirement";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1666,7 +1659,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.SEQ && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.sequence);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.sequence);
                     relationshipDiagram.MetaType = "SysML1.4::Sequence";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1674,7 +1667,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.STM && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.statechart);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.statechart);
                     relationshipDiagram.MetaType = "SysML1.4::StateMachine";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1682,7 +1675,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.UC && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.useCase);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.useCase);
                     relationshipDiagram.MetaType = "SysML1.4::UseCase";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1692,7 +1685,7 @@ namespace MTIP.Translations
             }
             else
             {
-                relationshipDiagram = orphanedPackage.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.component);
+                relationshipDiagram = orphanedPackage.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), DiagramConstants.component);
                 relationshipDiagram.Update();
                 orphanedPackage.Diagrams.Refresh();
                 return relationshipDiagram;
@@ -1812,132 +1805,126 @@ namespace MTIP.Translations
         internal string GetEAType(string sysmlType, string stereotype)
         {
             StereotypeConstants stereotypeConstants = new StereotypeConstants();
-            ActivityConstants activityConstants = new ActivityConstants();
-            BlockConstants blockConstants = new BlockConstants();
             UseCaseConstants useCaseConstants = new UseCaseConstants();
-            InternalBlockConstants internalBlockConstants = new InternalBlockConstants();
-            RequirementConstants requirementConstants = new RequirementConstants();
-            ProfileConstants profileConstants = new ProfileConstants();
-            SequenceConstants sequenceConstants = new SequenceConstants();
             StateMachineConstants stateMachineConstants = new StateMachineConstants();
             string type = "";
-            if (sysmlType == SysmlConstants.ACTIVITY) type = activityConstants.activity;
-            else if (sysmlType == SysmlConstants.ACTIVITYFINALNODE) type = activityConstants.stateNode;
-            else if (sysmlType == SysmlConstants.ACTIVITYPARAMETERNODE) type = activityConstants.activityParameter;
-            else if (sysmlType == SysmlConstants.ACTIVITYPARTITION) type = activityConstants.activityPartion;
+            if (sysmlType == SysmlConstants.ACTIVITY) type = ActivityConstants.ACTIVITY;
+            else if (sysmlType == SysmlConstants.ACTIVITYFINALNODE) type = ActivityConstants.STATENODE;
+            else if (sysmlType == SysmlConstants.ACTIVITYPARAMETERNODE) type = ActivityConstants.ACTIVITYPARAMETER;
+            else if (sysmlType == SysmlConstants.ACTIVITYPARTITION) type = ActivityConstants.ACTIVITYPARTION;
             else if (sysmlType == SysmlConstants.BLOCK)
             {
-                if (stereotype == stereotypeConstants.constraintBlockCap || stereotype == stereotypeConstants.constraintBlock) type = blockConstants.constraintBlock;
-                else type = blockConstants.block;
+                if (stereotype == stereotypeConstants.constraintBlockCap || stereotype == stereotypeConstants.constraintBlock) type = BlockConstants.CONSTRAINTBLOCK;
+                else type = BlockConstants.BLOCK;
             }
-            else if (sysmlType == SysmlConstants.ACCEPTEVENTACTION) type = activityConstants.acceptEventAction;
-            else if (sysmlType == SysmlConstants.ACTION) type = activityConstants.action;
-            else if (sysmlType == SysmlConstants.ACTIONPIN) type = activityConstants.actionPin;
-            else if (sysmlType == SysmlConstants.ACTIVITYINITIALNODE) type = activityConstants.stateNode;
+            else if (sysmlType == SysmlConstants.ACCEPTEVENTACTION) type = ActivityConstants.ACCEPTEVENTACTION;
+            else if (sysmlType == SysmlConstants.ACTION) type = ActivityConstants.ACTION;
+            else if (sysmlType == SysmlConstants.ACTIONPIN) type = ActivityConstants.ACTIONPIN;
+            else if (sysmlType == SysmlConstants.ACTIVITYINITIALNODE) type = ActivityConstants.STATENODE;
             else if (sysmlType == SysmlConstants.ACTOR) type = useCaseConstants.actor;
-            else if (sysmlType == SysmlConstants.ASSOCIATIONBLOCK) type = blockConstants.association;
-            else if (sysmlType == SysmlConstants.BOUNDREFERENCE) type = internalBlockConstants.boundReference;
-            else if (sysmlType == SysmlConstants.BOUNDARY) type = internalBlockConstants.boundary;
-            else if (sysmlType == SysmlConstants.BUSINESSREQUIREMENT) type = requirementConstants.requirement;
-            else if (sysmlType == SysmlConstants.CLASSIFIERBEHAVIORPROPERTY) type = internalBlockConstants.property;
-            else if (sysmlType == SysmlConstants.CALLBEHAVIORACTION) type = activityConstants.callBehaviorAction;
-            else if (sysmlType == SysmlConstants.CALLOPERATIONACTION) type = activityConstants.callOperationAction;
-            else if (sysmlType == SysmlConstants.CENTRALBUFFERNODE) type = activityConstants.centralBufferNode;
-            else if (sysmlType == SysmlConstants.CHANGE) type = activityConstants.change;
-            else if (sysmlType == SysmlConstants.CHOICEPSUEDOSTATE) type = activityConstants.stateNode;
-            else if (sysmlType == SysmlConstants.CLASS) type = profileConstants.classType;
-            else if (sysmlType == SysmlConstants.CLASSIFICATION) type = profileConstants.part;
-            else if (sysmlType == SysmlConstants.COLLABORATION) type = sequenceConstants.collaboration;
-            else if (sysmlType == SysmlConstants.CONSTRAINTBLOCK) type = blockConstants.constraintBlock;
-            else if (sysmlType == SysmlConstants.CONSTRAINT) type = profileConstants.constraint;
-            else if (sysmlType == SysmlConstants.CONSTRAINTBLOCK) type = blockConstants.block;
-            else if (sysmlType == SysmlConstants.CONSTRAINTPARAMETER) type = activityConstants.property;
-            else if (sysmlType == SysmlConstants.CONDITIONALNODE) type = activityConstants.conditionalNode;
-            else if (sysmlType == SysmlConstants.COMBINEDFRAGMENT) type = sequenceConstants.interactionFragment;
-            else if (sysmlType == SysmlConstants.CREATEOBJECTACTION) type = activityConstants.createObjectAction;
-            else if (sysmlType == SysmlConstants.DATASTORENODE) type = profileConstants.objectType;
-            else if (sysmlType == SysmlConstants.DECISIONNODE) type = activityConstants.decision;
+            else if (sysmlType == SysmlConstants.ASSOCIATIONBLOCK) type = BlockConstants.ASSOCIATION;
+            else if (sysmlType == SysmlConstants.BOUNDREFERENCE) type = InternalBlockConstants.BOUNDREFERENCE;
+            else if (sysmlType == SysmlConstants.BOUNDARY) type = InternalBlockConstants.BOUNDARY;
+            else if (sysmlType == SysmlConstants.BUSINESSREQUIREMENT) type = RequirementConstants.REQUIREMENT;
+            else if (sysmlType == SysmlConstants.CLASSIFIERBEHAVIORPROPERTY) type = InternalBlockConstants.PROPERTY;
+            else if (sysmlType == SysmlConstants.CALLBEHAVIORACTION) type = ActivityConstants.CALLBEHAVIORACTION;
+            else if (sysmlType == SysmlConstants.CALLOPERATIONACTION) type = ActivityConstants.CALLOPERATIONACTION;
+            else if (sysmlType == SysmlConstants.CENTRALBUFFERNODE) type = ActivityConstants.CENTRALBUFFERNODE;
+            else if (sysmlType == SysmlConstants.CHANGE) type = ActivityConstants.CHANGE;
+            else if (sysmlType == SysmlConstants.CHOICEPSUEDOSTATE) type = ActivityConstants.STATENODE;
+            else if (sysmlType == SysmlConstants.CLASS) type = ProfileConstants.CLASSTYPE;
+            else if (sysmlType == SysmlConstants.CLASSIFICATION) type = ProfileConstants.PART;
+            else if (sysmlType == SysmlConstants.COLLABORATION) type = SequenceConstants.COLLABORATION;
+            else if (sysmlType == SysmlConstants.CONSTRAINTBLOCK) type = BlockConstants.CONSTRAINTBLOCK;
+            else if (sysmlType == SysmlConstants.CONSTRAINT) type = ProfileConstants.CONSTRAINT;
+            else if (sysmlType == SysmlConstants.CONSTRAINTBLOCK) type = BlockConstants.BLOCK;
+            else if (sysmlType == SysmlConstants.CONSTRAINTPARAMETER) type = ActivityConstants.PROPERTY;
+            else if (sysmlType == SysmlConstants.CONDITIONALNODE) type = ActivityConstants.CONDITIONALNODE;
+            else if (sysmlType == SysmlConstants.COMBINEDFRAGMENT) type = SequenceConstants.INTERACTIONFRAGMENT;
+            else if (sysmlType == SysmlConstants.CREATEOBJECTACTION) type = ActivityConstants.CREATEOBJECTACTION;
+            else if (sysmlType == SysmlConstants.DATASTORENODE) type = ProfileConstants.OBJECTTYPE;
+            else if (sysmlType == SysmlConstants.DECISIONNODE) type = ActivityConstants.DECISION;
             else if (sysmlType == SysmlConstants.DEEPHISTORY) type = stateMachineConstants.stateNode;
-            else if (sysmlType == SysmlConstants.DESIGNCONSTRAINT) type = requirementConstants.designConstraint;
-            else if (sysmlType == SysmlConstants.DESTROYOBJECTACTION) type = activityConstants.destroyObjectAction;
-            else if (sysmlType == SysmlConstants.DOMAIN) type = blockConstants.block;
+            else if (sysmlType == SysmlConstants.DESIGNCONSTRAINT) type = RequirementConstants.DESIGNCONSTRAINT;
+            else if (sysmlType == SysmlConstants.DESTROYOBJECTACTION) type = ActivityConstants.DESTROYOBJECTACTION;
+            else if (sysmlType == SysmlConstants.DOMAIN) type = BlockConstants.BLOCK;
             else if (sysmlType == SysmlConstants.ENTRYPOINT) type = stateMachineConstants.entryPoint;
-            else if (sysmlType == SysmlConstants.ENUMERATION) type = blockConstants.enumeration;
-            else if (sysmlType == SysmlConstants.EVENT) type = activityConstants.eventType;
-            else if (sysmlType == SysmlConstants.EXCEPTIONHANDLER) type = profileConstants.exceptionHandler;
-            else if (sysmlType == SysmlConstants.EXTENDEDREQUIREMENT) type = requirementConstants.extendedRequirement;
+            else if (sysmlType == SysmlConstants.ENUMERATION) type = BlockConstants.ENUMERATION;
+            else if (sysmlType == SysmlConstants.EVENT) type = ActivityConstants.EVENTTYPE;
+            else if (sysmlType == SysmlConstants.EXCEPTIONHANDLER) type = ProfileConstants.EXCEPTIONHANDLER;
+            else if (sysmlType == SysmlConstants.EXTENDEDREQUIREMENT) type = RequirementConstants.EXTENDEDREQUIREMENT;
             else if (sysmlType == SysmlConstants.EXITPOINT) type = stateMachineConstants.exitPoint;
-            else if (sysmlType == SysmlConstants.EXTERNAL) type = blockConstants.external;
-            else if (sysmlType == SysmlConstants.LIFELINE) type = sequenceConstants.sequence;
-            else if (sysmlType == SysmlConstants.PACKAGE) type = profileConstants.package;
-            else if (sysmlType == SysmlConstants.PROPERTY) type = internalBlockConstants.property;
-            else if (sysmlType == SysmlConstants.PORT) type = blockConstants.port;
-            else if (sysmlType == SysmlConstants.PROXYPORT) type = blockConstants.proxyPort;
-            else if (sysmlType == SysmlConstants.FINALSTATE) type = activityConstants.stateNode;
-            else if (sysmlType == SysmlConstants.FULLPORT) type = blockConstants.fullPort;
-            else if (sysmlType == SysmlConstants.FLOWFINALNODE) type = activityConstants.stateNode;
-            else if (sysmlType == SysmlConstants.FLOWPORT) type = blockConstants.flowPort;
-            else if (sysmlType == SysmlConstants.FUNCTIONALREQUIREMENT) type = requirementConstants.functionalRequirement;
-            else if (sysmlType == SysmlConstants.HYPERLINK) type = profileConstants.text;
-            else if (sysmlType == SysmlConstants.INFORMATIONITEM) type = activityConstants.informationItem;
-            else if (sysmlType == SysmlConstants.INITIALPSEUDOSTATE) type = activityConstants.stateNode;
-            else if (sysmlType == SysmlConstants.INPUTPIN) type = activityConstants.actionPin;
-            else if (sysmlType == SysmlConstants.INTERACTION) type = sequenceConstants.interaction;
-            else if (sysmlType == SysmlConstants.INTERFACE) type = blockConstants.interfaceType;
-            else if (sysmlType == SysmlConstants.INTERFACEREQUIREMENT) type = requirementConstants.interfaceRequirement;
-            else if (sysmlType == SysmlConstants.INTERFACEBLOCK) type = blockConstants.interfaceBlock;
-            else if (sysmlType == SysmlConstants.INSTANCESPECIFICATION) type = profileConstants.objectType;
-            else if (sysmlType == SysmlConstants.INTERRUPTIBLEACTIVITYREGION) type = activityConstants.interruptibleActivityRegion;
-            else if (sysmlType == SysmlConstants.MERGENODE) type = activityConstants.mergeNode;
+            else if (sysmlType == SysmlConstants.EXTERNAL) type = BlockConstants.EXTERNAL;
+            else if (sysmlType == SysmlConstants.LIFELINE) type = SequenceConstants.SEQUENCE;
+            else if (sysmlType == SysmlConstants.PACKAGE) type = ProfileConstants.PACKAGE;
+            else if (sysmlType == SysmlConstants.PROPERTY) type = InternalBlockConstants.PROPERTY;
+            else if (sysmlType == SysmlConstants.PORT) type = BlockConstants.PORT;
+            else if (sysmlType == SysmlConstants.PROXYPORT) type = BlockConstants.PROXYPORT;
+            else if (sysmlType == SysmlConstants.FINALSTATE) type = ActivityConstants.STATENODE;
+            else if (sysmlType == SysmlConstants.FULLPORT) type = BlockConstants.FULLPORT;
+            else if (sysmlType == SysmlConstants.FLOWFINALNODE) type = ActivityConstants.STATENODE;
+            else if (sysmlType == SysmlConstants.FLOWPORT) type = BlockConstants.FLOWPORT;
+            else if (sysmlType == SysmlConstants.FUNCTIONALREQUIREMENT) type = RequirementConstants.FUNCTIONALREQUIREMENT;
+            else if (sysmlType == SysmlConstants.HYPERLINK) type = ProfileConstants.TEXT;
+            else if (sysmlType == SysmlConstants.INFORMATIONITEM) type = ActivityConstants.INFORMATIONITEM;
+            else if (sysmlType == SysmlConstants.INITIALPSEUDOSTATE) type = ActivityConstants.STATENODE;
+            else if (sysmlType == SysmlConstants.INPUTPIN) type = ActivityConstants.ACTIONPIN;
+            else if (sysmlType == SysmlConstants.INTERACTION) type = SequenceConstants.INTERACTION;
+            else if (sysmlType == SysmlConstants.INTERFACE) type = BlockConstants.INTERFACETYPE;
+            else if (sysmlType == SysmlConstants.INTERFACEREQUIREMENT) type = RequirementConstants.INTERFACEREQUIREMENT;
+            else if (sysmlType == SysmlConstants.INTERFACEBLOCK) type = BlockConstants.INTERFACEBLOCK;
+            else if (sysmlType == SysmlConstants.INSTANCESPECIFICATION) type = ProfileConstants.OBJECTTYPE;
+            else if (sysmlType == SysmlConstants.INTERRUPTIBLEACTIVITYREGION) type = ActivityConstants.INTERRUPTIBLEACTIVITYREGION;
+            else if (sysmlType == SysmlConstants.MERGENODE) type = ActivityConstants.MERGENODE;
             else if (sysmlType == SysmlConstants.METACLASS) type = stereotypeConstants.metaclass;
-            else if (sysmlType == SysmlConstants.NAVIGATIONCELL) type = profileConstants.text;
-            else if (sysmlType == SysmlConstants.NOTE) type = profileConstants.note;
-            else if (sysmlType == SysmlConstants.OBJECT) type = profileConstants.objectType;
-            else if (sysmlType == SysmlConstants.OBJECTNODE) type = activityConstants.objectNode;
-            else if (sysmlType == SysmlConstants.OBJECTIVEFUNCTION) type = profileConstants.objectiveFunction;
-            else if (sysmlType == SysmlConstants.OPERATION) type = blockConstants.operation;
-            else if (sysmlType == SysmlConstants.OPAQUEACTION) type = activityConstants.action;
-            else if (sysmlType == SysmlConstants.OUTPUTPIN) type = activityConstants.actionPin;
+            else if (sysmlType == SysmlConstants.NAVIGATIONCELL) type = ProfileConstants.TEXT;
+            else if (sysmlType == SysmlConstants.NOTE) type = ProfileConstants.NOTE;
+            else if (sysmlType == SysmlConstants.OBJECT) type = ProfileConstants.OBJECTTYPE;
+            else if (sysmlType == SysmlConstants.OBJECTNODE) type = ActivityConstants.OBJECTNODE;
+            else if (sysmlType == SysmlConstants.OBJECTIVEFUNCTION) type = ProfileConstants.OBJECTIVEFUNCTION;
+            else if (sysmlType == SysmlConstants.OPERATION) type = BlockConstants.OPERATION;
+            else if (sysmlType == SysmlConstants.OPAQUEACTION) type = ActivityConstants.ACTION;
+            else if (sysmlType == SysmlConstants.OUTPUTPIN) type = ActivityConstants.ACTIONPIN;
             else if (sysmlType == SysmlConstants.JOIN) type = stateMachineConstants.synchronization;
-            else if (sysmlType == SysmlConstants.JOINNODE) type = activityConstants.synchronization;
+            else if (sysmlType == SysmlConstants.JOINNODE) type = ActivityConstants.SYNCHRONIZATION;
             else if (sysmlType == SysmlConstants.FORK) type = stateMachineConstants.synchronization;
-            else if (sysmlType == SysmlConstants.FLOWPROPERTY) type = internalBlockConstants.flowProperty;
-            else if (sysmlType == SysmlConstants.FORKNODE) type = activityConstants.synchronization;
-            else if (sysmlType == SysmlConstants.VALUEPROPERTY) type = blockConstants.dataType;
-            else if (sysmlType == SysmlConstants.PARTPROPERTY) type = blockConstants.property;
-            else if (sysmlType == SysmlConstants.REFERENCEPROPERTY) type = internalBlockConstants.referenceProperty;
-            else if (sysmlType == SysmlConstants.REQUIREMENT) type = requirementConstants.requirement;
+            else if (sysmlType == SysmlConstants.FLOWPROPERTY) type = InternalBlockConstants.FLOWPROPERTY;
+            else if (sysmlType == SysmlConstants.FORKNODE) type = ActivityConstants.SYNCHRONIZATION;
+            else if (sysmlType == SysmlConstants.VALUEPROPERTY) type = BlockConstants.DATATYPE;
+            else if (sysmlType == SysmlConstants.PARTPROPERTY) type = BlockConstants.PROPERTY;
+            else if (sysmlType == SysmlConstants.REFERENCEPROPERTY) type = InternalBlockConstants.REFERENCEPROPERTY;
+            else if (sysmlType == SysmlConstants.REQUIREMENT) type = RequirementConstants.REQUIREMENT;
             else if (sysmlType == SysmlConstants.REGION) type = stateMachineConstants.region;
-            else if (sysmlType == SysmlConstants.CONSTRAINTPROPERTY) type = internalBlockConstants.constraintProperty;
-            else if (sysmlType == SysmlConstants.PARTICIPANTPROPERTY) type = internalBlockConstants.participantProperty;
-            else if (sysmlType == SysmlConstants.PERFORMANCEREQUIREMENT) type = requirementConstants.performanceRequirement;
-            else if (sysmlType == SysmlConstants.PHYSICALREQUIREMENT) type = requirementConstants.physicalRequirement;
-            else if (sysmlType == SysmlConstants.PORT) type = blockConstants.port;
-            else if (sysmlType == SysmlConstants.SENDSIGNALACTION) type = activityConstants.sendSignalAction;
+            else if (sysmlType == SysmlConstants.CONSTRAINTPROPERTY) type = InternalBlockConstants.CONSTRAINTPROPERTY;
+            else if (sysmlType == SysmlConstants.PARTICIPANTPROPERTY) type = InternalBlockConstants.PARTICIPANTPROPERTY;
+            else if (sysmlType == SysmlConstants.PERFORMANCEREQUIREMENT) type = RequirementConstants.PERFORMANCEREQUIREMENT;
+            else if (sysmlType == SysmlConstants.PHYSICALREQUIREMENT) type = RequirementConstants.PHYSICALREQUIREMENT;
+            else if (sysmlType == SysmlConstants.PORT) type = BlockConstants.PORT;
+            else if (sysmlType == SysmlConstants.SENDSIGNALACTION) type = ActivityConstants.SENDSIGNALACTION;
             else if (sysmlType == SysmlConstants.SHALLOWHISTORY) type = stateMachineConstants.stateNode;
-            else if (sysmlType == SysmlConstants.SIGNAL) type = blockConstants.signal;
-            else if (sysmlType == SysmlConstants.STEREOTYPE) type = profileConstants.classType;
+            else if (sysmlType == SysmlConstants.SIGNAL) type = BlockConstants.SIGNAL;
+            else if (sysmlType == SysmlConstants.STEREOTYPE) type = ProfileConstants.CLASSTYPE;
             else if (sysmlType == SysmlConstants.STATE) type = stateMachineConstants.state;
-            else if (sysmlType == SysmlConstants.STATEINVARIANT) type = sequenceConstants.interactionState;
+            else if (sysmlType == SysmlConstants.STATEINVARIANT) type = SequenceConstants.INTERACTIONSTATE;
             else if (sysmlType == SysmlConstants.STATEMACHINE) type = stateMachineConstants.stateMachine;
-            else if (sysmlType == SysmlConstants.SUBSYSTEM) type = blockConstants.block;
+            else if (sysmlType == SysmlConstants.SUBSYSTEM) type = BlockConstants.BLOCK;
             else if (sysmlType == SysmlConstants.SYNCHRONIZATION) type = stateMachineConstants.synchronization;
-            else if (sysmlType == SysmlConstants.SYSTEM) type = blockConstants.block;
-            else if (sysmlType == SysmlConstants.SYSTEMCONTEXT) type = blockConstants.block;
+            else if (sysmlType == SysmlConstants.SYSTEM) type = BlockConstants.BLOCK;
+            else if (sysmlType == SysmlConstants.SYSTEMCONTEXT) type = BlockConstants.BLOCK;
             else if (sysmlType == SysmlConstants.TERMINATE) type = stateMachineConstants.stateNode;
-            else if (sysmlType == SysmlConstants.TEXT) type = profileConstants.text;
+            else if (sysmlType == SysmlConstants.TEXT) type = ProfileConstants.TEXT;
             else if (sysmlType == SysmlConstants.TRIGGER) type = stateMachineConstants.trigger;
-            else if (sysmlType == SysmlConstants.UNIT) type = blockConstants.unit;
+            else if (sysmlType == SysmlConstants.UNIT) type = BlockConstants.UNIT;
             else if (sysmlType == SysmlConstants.USECASE) type = useCaseConstants.useCase;
-            else if (sysmlType == SysmlConstants.QUANTITYKIND) type = blockConstants.quantityKind;
-            else if (sysmlType == SysmlConstants.VALUETYPE) type = blockConstants.valueType;
-            else if (sysmlType == SysmlConstants.FLOWSPECIFICATION) type = blockConstants.interfaceType;
+            else if (sysmlType == SysmlConstants.QUANTITYKIND) type = BlockConstants.QUANTITYKIND;
+            else if (sysmlType == SysmlConstants.VALUETYPE) type = BlockConstants.VALUETYPE;
+            else if (sysmlType == SysmlConstants.FLOWSPECIFICATION) type = BlockConstants.INTERFACETYPE;
             return type;
         }
         private string GetSysMLType(string type, string stereotype, int subtype, string metatype)
         {
             StereotypeConstants stereotypeConstants = new StereotypeConstants();
-            MetatypeConstants metatypeConstants = new MetatypeConstants();
+            
 
             string elementType = "";
             if (stereotype == stereotypeConstants.block) elementType = SysmlConstants.SYSMLBLOCK;
@@ -2046,10 +2033,10 @@ namespace MTIP.Translations
                             type == SysmlConstants.ACTIONPIN || type == SysmlConstants.EVENT)
             {
                 if (stereotype == stereotypeConstants.allocated) elementType = SysmlConstants.SYSMLALLOCATED;
-                else if (type == SysmlConstants.ACTION && metatype == metatypeConstants.acceptEventAction) elementType = SysmlConstants.SYSMLACCEPTEVENTACTION;
-                else if (type == SysmlConstants.ACTION && metatype == metatypeConstants.callBehaviorAction) elementType = SysmlConstants.SYSMLCALLBEHAVIORACTION;
-                else if (type == SysmlConstants.ACTION && metatype == metatypeConstants.opaqueAction) elementType = SysmlConstants.SYSMLOPAQUEACTION;
-                else if (type == SysmlConstants.ACTION && metatype == metatypeConstants.sendSignalAction) elementType = SysmlConstants.SYSMLSENDSIGNALACTION;
+                else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.acceptEventAction) elementType = SysmlConstants.SYSMLACCEPTEVENTACTION;
+                else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.callBehaviorAction) elementType = SysmlConstants.SYSMLCALLBEHAVIORACTION;
+                else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.opaqueAction) elementType = SysmlConstants.SYSMLOPAQUEACTION;
+                else if (type == SysmlConstants.ACTION && metatype == MetatypeConstants.sendSignalAction) elementType = SysmlConstants.SYSMLSENDSIGNALACTION;
                 else if (type == SysmlConstants.ACTION) elementType = SysmlConstants.SYSMLACTION;
                 else if (type == SysmlConstants.ACTIVITYPARAMETER) elementType = SysmlConstants.SYSMLACTIVITYPARAMETER;
                 else if (type == SysmlConstants.ACTIONPIN && stereotype == stereotypeConstants.output) elementType = SysmlConstants.SYSMLOUTPUTPIN;

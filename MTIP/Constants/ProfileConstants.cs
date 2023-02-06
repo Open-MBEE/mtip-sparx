@@ -7,37 +7,20 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class ProfileConstants
+    public static class ProfileConstants
     {
-        public string classType;
-        public string constraint;
-        public string exceptionHandler;
-        public string note;
-        public string objectiveFunction;
-        public string objectType;
-        public string package;
-        public string part;
-        public string text;
-
-        public ProfileConstants(){
-            classType = "Class";
-            constraint = "Constraint";
-            exceptionHandler = "ExceptionHandler";
-            note = "Note";
-            objectiveFunction = "ObjectiveFunction";
-            objectType = "Object";
-            package = "Package";
-            part = "Part";
-            text = "Text";
+        public const string CLASSTYPE = "Class";
+        public const string CONSTRAINT = "Constraint";
+        public const string EXCEPTIONHANDLER = "ExceptionHandler";
+        public const string NOTE = "Note";
+        public const string OBJECTIVEFUNCTION = "ObjectiveFunction";
+        public const string OBJECTTYPE = "Object";
+        public const string PACKAGE = "Package";
+        public const string PART = "Part";
+        public const string TEXT = "Text";
         }
 
     }
-}
+

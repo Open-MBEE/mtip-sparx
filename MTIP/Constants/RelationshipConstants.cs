@@ -7,83 +7,42 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class RelationshipConstants
+    public static class RelationshipConstants
     {
-        public string asynchCall;
-        public string asynchSignal;
-        public string classifiedBy;
-        public string client;
-        public string compositeDiagram;
-        public string diagramConnector;
-        public string effect;
-        public string element;
-        public string guard;
-        public string hasParent;
-        public string hyperlink;
-        public string id;
-        public string messageNumber;
-        public string metaclass;
-        public string metarelationship;
-        public string profile;
-        public string relationships;
-        public string relMetadata;
-        public string relMetadataBottom;
-        public string relMetadataLeft;
-        public string relMetadataRight;
-        public string relMetadataSeq;
-        public string relMetadataTop;
-        public string reply;
-        public string signalGuid;
-        public string signature;
-        public string supplier;
-        public string synchCall;
-        public string trigger;
-        public string type;
-        public string typedBy;
-        public string valueSpecification;
-
-        public RelationshipConstants()
-        {
-            this.asynchCall = "asynchCall";
-            this.asynchSignal = "asynchSignal";
-            this.classifiedBy = "classifiedBy";
-            this.client = "client";
-            this.compositeDiagram = "compositeDiagram";
-            this.diagramConnector = "diagramConnector";
-            this.effect = "effect";
-            this.element = "element";
-            this.guard = "guard";
-            this.hasParent = "hasParent";
-            this.hyperlink = "hyperlink";
-            this.id = "id";
-            this.messageNumber = "messageNumber";
-            this.metaclass = "metaclass";
-            this.metarelationship = "metarelationship";
-            this.profile = "profile";
-            this.relationships = "relationships";
-            this.relMetadata = "relationship_metadata";
-            this.relMetadataBottom = "bottom";
-            this.relMetadataLeft = "left";
-            this.relMetadataRight = "right";
-            this.relMetadataSeq = "sequence";
-            this.relMetadataTop = "top";
-            this.reply = "reply";
-            this.signalGuid = "signal_guid";
-            this.signature = "signature";
-            this.supplier = "supplier";
-            this.synchCall = "synchCall";
-            this.trigger = "trigger";
-            this.type = "type";
-            this.typedBy = "typedBy";
-            this.valueSpecification = "valueSpecification";
-        }
+        public const string ASYNCHCALL = "asynchCall";
+        public const string ASYNCHSIGNAL = "asynchSignal";
+        public const string CLASSIFIEDBY = "classifiedBy";
+        public const string CLIENT = "client";
+        public const string COMPOSITEDIAGRAM = "compositeDiagram";
+        public const string DIAGRAMCONNECTOR = "diagramConnector";
+        public const string EFFECT = "effect";
+        public const string ELEMENT = "element";
+        public const string GUARD = "guard";
+        public const string HASPARENT = "hasParent";
+        public const string HYPERLINK = "hyperlink";
+        public const string ID = "id";
+        public const string MESSAGENUMBER = "messageNumber";
+        public const string METACLASS = "metaclass";
+        public const string METARELATIONSHIP = "metarelationship";
+        public const string PROFILE = "profile";
+        public const string RELATIONSHIPS = "relationships";
+        public const string RELMETADATA = "relationship_metadata";
+        public const string RELMETADATABOTTOM = "bottom";
+        public const string RELMETADATALEFT = "left";
+        public const string RELMETADATARIGHT = "right";
+        public const string RELMETADATASEQ = "sequence";
+        public const string RELMETADATATOP = "top";
+        public const string REPLY = "reply";
+        public const string SIGNALGUID = "signal_guid";
+        public const string SIGNATURE = "signature";
+        public const string SUPPLIER = "supplier";
+        public const string SYNCHCALL = "synchCall";
+        public const string TRIGGER = "trigger";
+        public const string TYPE = "type";
+        public const string TYPEDBY = "typedBy";
+        public const string VALUESPECIFICATION = "valueSpecification";
     }
 }
+
