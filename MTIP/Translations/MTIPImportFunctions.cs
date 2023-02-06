@@ -156,9 +156,7 @@ namespace MTIP.Translations
         internal Dictionary<string, Models.XmlItem> BuildModelDictionary(XmlNode packet)
         {
             Dictionary<string, Models.XmlItem> modelElements = new Dictionary<string, Models.XmlItem>();
-            AttributeConstants attributeConstants = new AttributeConstants();
-
-
+           
             foreach (XmlNode dataNode in packet)
             {
                 XmlItem modelElement = new XmlItem();
@@ -166,7 +164,7 @@ namespace MTIP.Translations
                 foreach (XmlNode fieldNode in dataNode)
                 {
                     // get model element type (ex. Sysml.Package)
-                    if (fieldNode.Name == attributeConstants.type)
+                    if (fieldNode.Name == AttributeConstants.TYPE)
                     {
                         string type = fieldNode.InnerText;
                         string element = type.Split('.')[1];
@@ -174,7 +172,7 @@ namespace MTIP.Translations
                     }
 
                     //get ID associated with each model element (for now, EA GUID)
-                    if (fieldNode.Name == attributeConstants.id)
+                    if (fieldNode.Name == AttributeConstants.ID)
                     {
                         if (fieldNode.SelectSingleNode("ea") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("ea").InnerText);
                         else if (fieldNode.SelectSingleNode("cameo") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("cameo").InnerText);
@@ -183,11 +181,11 @@ namespace MTIP.Translations
                     }
 
                     // Loop through attributes
-                    if (fieldNode.Name == attributeConstants.attributes)
+                    if (fieldNode.Name == AttributeConstants.ATTRIBUTES)
                     {
                         modelElement = GetAttributes(fieldNode, modelElement);
                     }
-                    if (fieldNode.Name == attributeConstants.relationships)
+                    if (fieldNode.Name == AttributeConstants.RELATIONSHIPS)
                     {
                         modelElement = GetRelationships(fieldNode, modelElement);
                     }
@@ -376,13 +374,11 @@ namespace MTIP.Translations
 
         internal XmlItem GetAttributes(XmlNode fieldNode, XmlItem modelElement)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
-
             foreach (XmlNode attribute in fieldNode)
             {
                 try
                 {
-                    if (attribute.Attributes["key"].Value == attributeConstants.attribute)
+                    if (attribute.Attributes["key"].Value == AttributeConstants.ATTRIBUTE)
                     {
                         foreach (XmlNode attributeAttrib in attribute)
                         {
@@ -390,72 +386,72 @@ namespace MTIP.Translations
                             string name = "";
                             foreach (XmlNode attribAttrib in attributeAttrib)
                             {
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.type) attributeAttributes.Add(attributeConstants.type, GetInnerAttribute(attribAttrib));
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.initialValue) attributeAttributes.Add(attributeConstants.initialValue, GetInnerAttribute(attribAttrib));
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.visibility) attributeAttributes.Add(attributeConstants.visibility, GetInnerAttribute(attribAttrib));
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.stereotype) attributeAttributes.Add(attributeConstants.stereotype, GetInnerAttribute(attribAttrib));
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.alias) attributeAttributes.Add(attributeConstants.alias, GetInnerAttribute(attribAttrib));
-                                if (attribAttrib.Attributes["key"].Value == attributeConstants.name) name = GetInnerAttribute(attribAttrib); ;
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.TYPE) attributeAttributes.Add(AttributeConstants.TYPE, GetInnerAttribute(attribAttrib));
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.INITIALVALUE) attributeAttributes.Add(AttributeConstants.INITIALVALUE, GetInnerAttribute(attribAttrib));
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.VISIBILITY) attributeAttributes.Add(AttributeConstants.VISIBILITY, GetInnerAttribute(attribAttrib));
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.STEREOTYPE) attributeAttributes.Add(AttributeConstants.STEREOTYPE, GetInnerAttribute(attribAttrib));
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.ALIAS) attributeAttributes.Add(AttributeConstants.ALIAS, GetInnerAttribute(attribAttrib));
+                                if (attribAttrib.Attributes["key"].Value == AttributeConstants.NAME) name = GetInnerAttribute(attribAttrib); ;
                             }
                             modelElement.AddElementAttribute(name, attributeAttributes);
                         }
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.stereotype)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.STEREOTYPE)
                     {
                         foreach (XmlNode attribStereotype in attribute)
                         {
-                            if (attribStereotype.Attributes["key"].Value == attributeConstants.stereotypeName)
+                            if (attribStereotype.Attributes["key"].Value == AttributeConstants.STEREOTYPENAME)
                             {
                                 if (attribStereotype.InnerText == "Term") GetTerm(fieldNode);
-                                if (!modelElement.GetAttributes().ContainsKey(attributeConstants.stereotype)) modelElement.AddAttribute(attributeConstants.stereotype, attribStereotype.InnerText);
+                                if (!modelElement.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE)) modelElement.AddAttribute(AttributeConstants.STEREOTYPE, attribStereotype.InnerText);
                             }
-                            if (attribStereotype.Attributes["key"].Value == attributeConstants.profileId) modelElement.SetProfileId(attribStereotype.InnerText);
-                            if (attribStereotype.Attributes["key"].Value == attributeConstants.profileName) modelElement.SetProfileName(attribStereotype.InnerText);
+                            if (attribStereotype.Attributes["key"].Value == AttributeConstants.PROFILEID) modelElement.SetProfileId(attribStereotype.InnerText);
+                            if (attribStereotype.Attributes["key"].Value == AttributeConstants.PROFILENAME) modelElement.SetProfileName(attribStereotype.InnerText);
                         }
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.name)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.NAME)
                     {
-                        modelElement.AddAttribute(attributeConstants.name, GetInnerAttribute(attribute));
+                        modelElement.AddAttribute(AttributeConstants.NAME, GetInnerAttribute(attribute));
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.documentation)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.DOCUMENTATION)
                     {
-                        modelElement.AddAttribute(attributeConstants.documentation, GetInnerAttribute(attribute));
+                        modelElement.AddAttribute(AttributeConstants.DOCUMENTATION, GetInnerAttribute(attribute));
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.displayAs)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.DISPLAYAS)
                     {
-                        modelElement.AddAttribute(attributeConstants.displayAs, GetInnerAttribute(attribute));
+                        modelElement.AddAttribute(AttributeConstants.DISPLAYAS, GetInnerAttribute(attribute));
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.constraint)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.CONSTRAINT)
                     {
                         modelElement.AddConstraint(attribute.InnerText, GetInnerAttribute(attribute));
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.taggedValue)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.TAGGEDVALUE)
                     {
                         foreach (XmlNode taggedValue in attribute)
                         {
                             modelElement.AddTaggedValue(taggedValue.Attributes["key"].Value, GetInnerAttribute(taggedValue));
                         }
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.behavior)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.BEHAVIOR)
                     {
                         foreach (XmlNode attr in attribute)
                         {
                             Behavior behavior = new Behavior();
                             foreach (XmlNode method in attr)
                             {
-                                if (method.Attributes["key"].Value == attributeConstants.name) behavior.SetName(method.InnerText);
-                                if (method.Attributes["key"].Value == attributeConstants.type) behavior.SetType(method.InnerText);
-                                if (method.Attributes["key"].Value == attributeConstants.value) behavior.SetValue(method.InnerText);
+                                if (method.Attributes["key"].Value == AttributeConstants.NAME) behavior.SetName(method.InnerText);
+                                if (method.Attributes["key"].Value == AttributeConstants.TYPE) behavior.SetType(method.InnerText);
+                                if (method.Attributes["key"].Value == AttributeConstants.VALUE) behavior.SetValue(method.InnerText);
                                 modelElement.AddBehavior(behavior);
                             }
                         }
 
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.receiveEvent)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.RECEIVEEVENT)
                     {
                         modelElement.SetClient(GetInnerAttribute(attribute));
                     }
-                    else if (attribute.Attributes["key"].Value == attributeConstants.sendEvent)
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.SENDEVENT)
                     {
                         modelElement.SetSupplier(GetInnerAttribute(attribute));
                     }
@@ -481,11 +477,10 @@ namespace MTIP.Translations
         internal string GetInnerAttribute(XmlNode attribute)
         {
             string value = "";
-            AttributeConstants attributeConstants = new AttributeConstants();
-
+           
             foreach (XmlNode attrib in attribute)
             {
-                if (attrib.Attributes["key"].Value == attributeConstants.value)
+                if (attrib.Attributes["key"].Value == AttributeConstants.VALUE)
                 {
                     value = attrib.InnerText;
                 }
@@ -611,19 +606,18 @@ namespace MTIP.Translations
         }
         internal void AddPkgPkg(string parentId, string childId)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
             try
             {
                 EA.Package parentPkg = repository.GetPackageByGuid(parsedXml[parentId].GetEAID());
                 XmlItem childItem = parsedXml[childId];
 
-                if (childItem.GetAttributes().ContainsKey(attributeConstants.displayAs))
+                if (childItem.GetAttributes().ContainsKey(AttributeConstants.DISPLAYAS))
                 {
-                    if (childItem.GetAttribute(attributeConstants.displayAs) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
+                    if (childItem.GetAttribute(AttributeConstants.DISPLAYAS) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
                 }
                 else if (childItem.GetElementType() == SysmlConstants.PROFILE)
                 {
-                    EA.Package childPkg = parentPkg.Packages.AddNew(childItem.GetAttribute(attributeConstants.name), "");
+                    EA.Package childPkg = parentPkg.Packages.AddNew(childItem.GetAttribute(AttributeConstants.NAME), "");
                     childPkg.Update();
                     childPkg.Element.Stereotype = "Profile";
                     childPkg.Update();
@@ -631,15 +625,15 @@ namespace MTIP.Translations
                 }
                 else
                 {
-                    EA.Package childPkg = parentPkg.Packages.AddNew(childItem.GetAttribute(attributeConstants.name), "");
+                    EA.Package childPkg = parentPkg.Packages.AddNew(childItem.GetAttribute(AttributeConstants.NAME), "");
                     string notes = "";
-                    if (childItem.GetAttributes().ContainsKey(attributeConstants.documentation))
+                    if (childItem.GetAttributes().ContainsKey(AttributeConstants.DOCUMENTATION))
                     {
-                        notes += childItem.GetAttribute(attributeConstants.documentation);
+                        notes += childItem.GetAttribute(AttributeConstants.DOCUMENTATION);
                     }
-                    if (childItem.GetAttributes().ContainsKey(attributeConstants.text))
+                    if (childItem.GetAttributes().ContainsKey(AttributeConstants.TEXT))
                     {
-                        notes = " - " + childItem.GetAttribute(attributeConstants.text);
+                        notes = " - " + childItem.GetAttribute(AttributeConstants.TEXT);
                     }
                     childPkg.Notes = notes;
                     childPkg.Update();
@@ -653,17 +647,17 @@ namespace MTIP.Translations
         }
         internal void AddPkgElement(string parentId, string childId)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
+            
             XmlItem childItem = parsedXml[childId];
             string stereotype = "";
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.stereotype)) stereotype = childItem.GetAttribute(attributeConstants.stereotype);
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE)) stereotype = childItem.GetAttribute(AttributeConstants.STEREOTYPE);
             if (GetEAType(childItem.GetElementType(), stereotype) != "")
             {
                 try
                 {
-                    if (childItem.GetAttributes().ContainsKey(attributeConstants.displayAs))
+                    if (childItem.GetAttributes().ContainsKey(AttributeConstants.DISPLAYAS))
                     {
-                        if (childItem.GetAttribute(attributeConstants.displayAs) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
+                        if (childItem.GetAttribute(AttributeConstants.DISPLAYAS) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
                     }
                     else
                     {
@@ -671,9 +665,9 @@ namespace MTIP.Translations
                         EA.Package parentPkg = repository.GetPackageByGuid(parsedXml[parentId].GetEAID());
                         EA.Element childElement = parentPkg.Elements.AddNew(childItem.GetName(), GetEAType(childItem.GetElementType(), stereotype));
 
-                        if (childItem.GetAttributes().ContainsKey(attributeConstants.documentation))
+                        if (childItem.GetAttributes().ContainsKey(AttributeConstants.DOCUMENTATION))
                         {
-                            childElement.Notes = childItem.GetAttribute(attributeConstants.documentation);
+                            childElement.Notes = childItem.GetAttribute(AttributeConstants.DOCUMENTATION);
                         }
                         GetElement(childElement, childItem, childId, SysmlConstants.SYSMLPACKAGE);
                     }
@@ -693,18 +687,18 @@ namespace MTIP.Translations
         }
         internal void AddElementElement(string parentId, string childId)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
+            
             XmlItem childItem = parsedXml[childId];
 
             string stereotype = "";
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.stereotype)) stereotype = childItem.GetAttribute(attributeConstants.stereotype);
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE)) stereotype = childItem.GetAttribute(AttributeConstants.STEREOTYPE);
             if (GetEAType(childItem.GetElementType(), stereotype) != "")
             {
                 try
                 {
-                    if (childItem.GetAttributes().ContainsKey(attributeConstants.displayAs))
+                    if (childItem.GetAttributes().ContainsKey(AttributeConstants.DISPLAYAS))
                     {
-                        if (childItem.GetAttribute(attributeConstants.displayAs) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
+                        if (childItem.GetAttribute(AttributeConstants.DISPLAYAS) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
                     }
                     else
                     {
@@ -759,7 +753,7 @@ namespace MTIP.Translations
             StereotypeConstants stereotypeConstants = new StereotypeConstants();
             MetatypeConstants metatypeConstants = new MetatypeConstants();
             ProfileConstants profileConstants = new ProfileConstants();
-            AttributeConstants attributeConstants = new AttributeConstants();
+            
 
             if (childElement.Type == SysmlConstants.STATENODE)
             {
@@ -812,9 +806,9 @@ namespace MTIP.Translations
                 if (childItem.GetElementType() == SysmlConstants.DATASTORENODE) childElement.Stereotype = stereotypeConstants.datastore;
 
             }
-            if (childElement.Type == SysmlConstants.STATE && childItem.GetAttributes().ContainsKey(attributeConstants.submachine))
+            if (childElement.Type == SysmlConstants.STATE && childItem.GetAttributes().ContainsKey(AttributeConstants.SUBMACHINE))
             {
-                childItem.SetClassifiedBy(childItem.GetAttribute(attributeConstants.submachine));
+                childItem.SetClassifiedBy(childItem.GetAttribute(AttributeConstants.SUBMACHINE));
                 classifiersToAdd.Add(childItem.GetMappingID(), childItem);
             }
             if (childElement.Type == SysmlConstants.CONSTRAINT)
@@ -834,9 +828,9 @@ namespace MTIP.Translations
             }
             if (childElement.Type == SysmlConstants.COMBINEDFRAGMENT)
             {
-                if (childItem.GetAttributes().ContainsKey(attributeConstants.interactionOperatorKind))
+                if (childItem.GetAttributes().ContainsKey(AttributeConstants.INTERACTIONOPERATORKIND))
                 {
-                    string interactionKind = childItem.GetAttributes()[attributeConstants.interactionOperatorKind];
+                    string interactionKind = childItem.GetAttributes()[AttributeConstants.INTERACTIONOPERATORKIND];
                     if (interactionKind == "alt") childElement.Subtype = 0;
                     else if (interactionKind == "assert") childElement.Subtype = 7;
                     else if (interactionKind == "break") childElement.Subtype = 2;
@@ -854,46 +848,46 @@ namespace MTIP.Translations
             childElement.Update();
             childElement.Refresh();
             if (childItem.GetElementType() == SysmlConstants.JOIN || childItem.GetElementType() == SysmlConstants.FORK) childElement.Stereotype = childItem.GetElementType();
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.displayAs))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.DISPLAYAS))
             {
-                if (childItem.GetAttribute(attributeConstants.displayAs) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
+                if (childItem.GetAttribute(AttributeConstants.DISPLAYAS) == "Diagram") diagramElements.Add(childItem.GetMappingID(), childItem);
             }
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.stereotype))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE))
             {
                 if (childItem.GetElementType() == SysmlConstants.STEREOTYPE) childElement.Stereotype = stereotypeConstants.stereotype;
                 else
                 {
-                    childElement.Stereotype = childItem.GetAttribute(attributeConstants.stereotype);
+                    childElement.Stereotype = childItem.GetAttribute(AttributeConstants.STEREOTYPE);
                 }
 
                 if (childItem.GetProfile() != "" && childItem.GetProfileID() != "")
                 {
-                    childElement.StereotypeEx = childItem.GetProfile() + "::" + childItem.GetAttribute(attributeConstants.stereotype);
+                    childElement.StereotypeEx = childItem.GetProfile() + "::" + childItem.GetAttribute(AttributeConstants.STEREOTYPE);
                 }
             }
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.extensionPoint))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.EXTENSIONPOINT))
             {
-                childElement.ExtensionPoints = childItem.GetAttribute(attributeConstants.extensionPoint);
+                childElement.ExtensionPoints = childItem.GetAttribute(AttributeConstants.EXTENSIONPOINT);
             }
-            if (childItem.GetClassifiedBy() != "" && !childItem.GetAttributes().ContainsKey(attributeConstants.submachine))
+            if (childItem.GetClassifiedBy() != "" && !childItem.GetAttributes().ContainsKey(AttributeConstants.SUBMACHINE))
             {
                 classifiersToAdd.Add(childItem.GetMappingID(), childItem);
             }
             string notes = "";
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.documentation))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.DOCUMENTATION))
             {
-                notes += childItem.GetAttribute(attributeConstants.documentation);
+                notes += childItem.GetAttribute(AttributeConstants.DOCUMENTATION);
             }
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.text))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.TEXT))
             {
-                notes = " - " + childItem.GetAttribute(attributeConstants.text);
+                notes = " - " + childItem.GetAttribute(AttributeConstants.TEXT);
             }
             childElement.Notes = notes;
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.multiplicity))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.MULTIPLICITY))
             {
-                childElement.Multiplicity = childItem.GetAttribute(attributeConstants.multiplicity);
+                childElement.Multiplicity = childItem.GetAttribute(AttributeConstants.MULTIPLICITY);
             }
-            if (childItem.GetAttributes().ContainsKey(attributeConstants.defaultValue))
+            if (childItem.GetAttributes().ContainsKey(AttributeConstants.DEFAULTVALUE))
             {
                 //childElement. = childItem.GetAttribute("extensionPoint");
             }
@@ -905,12 +899,12 @@ namespace MTIP.Translations
             {
                 foreach (KeyValuePair<string, Models.Attribute> attribute in childItem.GetElementAttributes())
                 {
-                    EA.Attribute childAttribute = childElement.Attributes.AddNew(attribute.Key, attribute.Value.GetAttribute(attributeConstants.type));
-                    if (attribute.Value.GetAttributes().ContainsKey(attributeConstants.defaultValue)) childAttribute.Default = attribute.Value.GetAttribute(attributeConstants.defaultValue);
-                    if (attribute.Value.GetAttributes().ContainsKey(attributeConstants.initialValue)) childAttribute.Default = attribute.Value.GetAttribute(attributeConstants.initialValue);
-                    if (attribute.Value.GetAttributes().ContainsKey(attributeConstants.stereotype)) childAttribute.Stereotype = attribute.Value.GetAttribute(attributeConstants.stereotype);
-                    if (attribute.Value.GetAttributes().ContainsKey(attributeConstants.visibility)) childAttribute.Visibility = attribute.Value.GetAttribute(attributeConstants.visibility);
-                    if (attribute.Value.GetAttributes().ContainsKey(attributeConstants.alias)) childAttribute.Alias = attribute.Value.GetAttribute(attributeConstants.alias);
+                    EA.Attribute childAttribute = childElement.Attributes.AddNew(attribute.Key, attribute.Value.GetAttribute(AttributeConstants.TYPE));
+                    if (attribute.Value.GetAttributes().ContainsKey(AttributeConstants.DEFAULTVALUE)) childAttribute.Default = attribute.Value.GetAttribute(AttributeConstants.DEFAULTVALUE);
+                    if (attribute.Value.GetAttributes().ContainsKey(AttributeConstants.INITIALVALUE)) childAttribute.Default = attribute.Value.GetAttribute(AttributeConstants.INITIALVALUE);
+                    if (attribute.Value.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE)) childAttribute.Stereotype = attribute.Value.GetAttribute(AttributeConstants.STEREOTYPE);
+                    if (attribute.Value.GetAttributes().ContainsKey(AttributeConstants.VISIBILITY)) childAttribute.Visibility = attribute.Value.GetAttribute(AttributeConstants.VISIBILITY);
+                    if (attribute.Value.GetAttributes().ContainsKey(AttributeConstants.ALIAS)) childAttribute.Alias = attribute.Value.GetAttribute(AttributeConstants.ALIAS);
                     childAttribute.Update();
                 }
             }
@@ -939,15 +933,15 @@ namespace MTIP.Translations
             }
             List<string> attributesAllowed = new List<string>()
             {
-                attributeConstants.stereotype,
-                attributeConstants.documentation,
-                attributeConstants.text,
-                attributeConstants.alias,
-                attributeConstants.displayAs,
-                attributeConstants.name,
-                attributeConstants.submachine,
-                attributeConstants.multiplicity,
-                attributeConstants.interactionOperatorKind
+                AttributeConstants.STEREOTYPE,
+                AttributeConstants.DOCUMENTATION,
+                AttributeConstants.TEXT,
+                AttributeConstants.ALIAS,
+                AttributeConstants.DISPLAYAS,
+                AttributeConstants.NAME,
+                AttributeConstants.SUBMACHINE,
+                AttributeConstants.MULTIPLICITY,
+                AttributeConstants.INTERACTIONOPERATORKIND
             };
             foreach (KeyValuePair<string, string> attribute in childItem.GetAttributes())
             {
@@ -965,14 +959,14 @@ namespace MTIP.Translations
         }
         internal void GetTerm(XmlNode fieldNode)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
+            
             GlossaryTerm term = new GlossaryTerm();
             foreach (XmlNode attribute in fieldNode)
             {
                 if (attribute.Attributes["key"] != null)
                 {
-                    if (attribute.Attributes["key"].Value == attributeConstants.name) term.SetName(attribute.InnerText);
-                    else if (attribute.Attributes["key"].Value == attributeConstants.documentation) term.SetMeaning(attribute.InnerText);
+                    if (attribute.Attributes["key"].Value == AttributeConstants.NAME) term.SetName(attribute.InnerText);
+                    else if (attribute.Attributes["key"].Value == AttributeConstants.DOCUMENTATION) term.SetMeaning(attribute.InnerText);
                     term.SetTermType("string");
                 }
             }
@@ -1005,7 +999,7 @@ namespace MTIP.Translations
         {
             foreach (KeyValuePair<string, XmlItem> relationshipItem in relationshipElements)
             {
-                AttributeConstants attributeConstants = new AttributeConstants();
+                
                 RelationshipConstants relationshipConstants = new RelationshipConstants();
                 try
                 {
@@ -1036,9 +1030,9 @@ namespace MTIP.Translations
                                 EA.Connector associationConnector = clientElement.Connectors.AddNew("", "Message");
                                 associationConnector.Name = relationshipItem.Value.GetName();
 
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(attributeConstants.messageSort))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(AttributeConstants.MESSAGESORT))
                                 {
-                                    if (relationshipItem.Value.GetAttribute(attributeConstants.messageSort) == relationshipConstants.asynchSignal)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.asynchSignal)
                                     {
                                         associationConnector.TransitionEvent = "Asynchronous";
                                         associationConnector.TransitionAction = "Signal";
@@ -1057,14 +1051,14 @@ namespace MTIP.Translations
                                             associationConnector.Update();
                                         }
                                     }
-                                    if (relationshipItem.Value.GetAttribute(attributeConstants.messageSort) == relationshipConstants.asynchCall)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.asynchCall)
                                     {
                                         associationConnector.TransitionEvent = "Asynchronous";
                                         associationConnector.TransitionAction = "Call";
                                         associationConnector.SupplierID = supplierElement.ElementID;
                                         associationConnector.ClientID = clientElement.ElementID;
                                     }
-                                    if (relationshipItem.Value.GetAttribute(attributeConstants.messageSort) == relationshipConstants.synchCall)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.synchCall)
                                     {
                                         associationConnector.TransitionEvent = "Synchronous";
                                         associationConnector.TransitionAction = "Call";
@@ -1072,7 +1066,7 @@ namespace MTIP.Translations
                                         associationConnector.ClientID = clientElement.ElementID;
                                     }
 
-                                    if (relationshipItem.Value.GetAttribute(attributeConstants.messageSort) == relationshipConstants.reply)
+                                    if (relationshipItem.Value.GetAttribute(AttributeConstants.MESSAGESORT) == relationshipConstants.reply)
                                     {
                                         associationConnector.TransitionEvent = "Synchronous";
                                         associationConnector.TransitionAction = "Call";
@@ -1080,9 +1074,9 @@ namespace MTIP.Translations
                                         associationConnector.ClientID = clientElement.ElementID;
                                     }
                                 }
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(attributeConstants.documentation))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(AttributeConstants.DOCUMENTATION))
                                 {
-                                    associationConnector.Notes = relationshipItem.Value.GetAttribute(attributeConstants.documentation);
+                                    associationConnector.Notes = relationshipItem.Value.GetAttribute(AttributeConstants.DOCUMENTATION);
                                 }
                                 clientElement.Connectors.Refresh();
                                 supplierElement.Connectors.Refresh();
@@ -1105,9 +1099,9 @@ namespace MTIP.Translations
                                     associationConnector.Subtype = "Extends";
                                     associationConnector.MetaType = "Extend";
                                 }
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(attributeConstants.stereotype))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE))
                                 {
-                                    string stereotype = relationshipItem.Value.GetAttribute(attributeConstants.stereotype);
+                                    string stereotype = relationshipItem.Value.GetAttribute(AttributeConstants.STEREOTYPE);
                                     associationConnector.Stereotype = stereotype;
                                     associationConnector.Update();
                                     // Add the type of the metarelationship or stereotyped relationship as a tagged value
@@ -1140,9 +1134,9 @@ namespace MTIP.Translations
                                     associationConnector.SupplierEnd.Aggregation = 2;
                                     associationConnector.Subtype = "Strong";
                                 }
-                                if (relationshipItem.Value.GetAttributes().ContainsKey(attributeConstants.documentation))
+                                if (relationshipItem.Value.GetAttributes().ContainsKey(AttributeConstants.DOCUMENTATION))
                                 {
-                                    associationConnector.Notes = relationshipItem.Value.GetAttribute(attributeConstants.documentation);
+                                    associationConnector.Notes = relationshipItem.Value.GetAttribute(AttributeConstants.DOCUMENTATION);
                                 }
                                 associationConnector.Update();
 
@@ -1226,7 +1220,7 @@ namespace MTIP.Translations
         }
         internal void BuildDiagrams()
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
+         
             foreach (KeyValuePair<string, XmlItem> diagramItem in diagramElements)
             {
                 try
@@ -1234,7 +1228,7 @@ namespace MTIP.Translations
                     XmlItem parentItem = parsedXml[diagramItem.Value.GetParent()];
 
                     string stereotype = "";
-                    if (diagramItem.Value.GetAttributes().ContainsKey(attributeConstants.stereotype)) stereotype = diagramItem.Value.GetAttribute(attributeConstants.stereotype);
+                    if (diagramItem.Value.GetAttributes().ContainsKey(AttributeConstants.STEREOTYPE)) stereotype = diagramItem.Value.GetAttribute(AttributeConstants.STEREOTYPE);
 
                     List<string> childItemIds = new List<string>();
 
@@ -1428,7 +1422,7 @@ namespace MTIP.Translations
         {
             foreach (KeyValuePair<string, XmlItem> hyperlinkToAdd in hyperLinksToAdd)
             {
-                AttributeConstants attributeConstants = new AttributeConstants();
+                
                 try
                 {
                     XmlItem parentItem = parsedXml[hyperlinkToAdd.Value.GetParent()];
@@ -1436,7 +1430,7 @@ namespace MTIP.Translations
                     EA.Package parentElement = repository.GetPackageByGuid(parentItem.GetEAID());
                     EA.Diagram targetDiagram = repository.GetDiagramByGuid(parsedXml[hyperlinkToAdd.Value.GetHyperlink()].GetEAID());
                     EA.Element hyperlinkElement = parentElement.Elements.AddNew("$" + hyperlinkToAdd.Value.GetHyperlinkType() + "://{" + targetDiagram.DiagramGUID + "}", "Text");
-                    hyperlinkElement.Notes = hyperlinkItem.GetAttribute(attributeConstants.documentation);
+                    hyperlinkElement.Notes = hyperlinkItem.GetAttribute(AttributeConstants.DOCUMENTATION);
                     hyperlinkItem.SetEAID(hyperlinkElement.ElementGUID);
                     hyperlinkElement.Update();
                     parentElement.Elements.Refresh();
@@ -1526,16 +1520,16 @@ namespace MTIP.Translations
         }
         internal EA.Diagram GetDiagram(XmlItem parentItem, KeyValuePair<string, XmlItem> diagramItem)
         {
-            AttributeConstants attributeConstants = new AttributeConstants();
+            
             DiagramConstants diagramConstants = new DiagramConstants();
             EA.Package pkg = repository.GetPackageByID(1);
-            EA.Diagram relationshipDiagram = repository.GetPackageByID(1).Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.component); ;
+            EA.Diagram relationshipDiagram = repository.GetPackageByID(1).Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.component); ;
             if (parentItem.GetElementType() == SysmlConstants.PACKAGE || parentItem.GetElementType() == SysmlConstants.PROFILE || parentItem.GetElementType() == SysmlConstants.MODEL)
             {
                 EA.Package parentPkg = repository.GetPackageByGuid(parentItem.GetEAID());
                 if (diagramItem.Value.GetElementType() == SysmlConstants.ACT)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.activity);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.activity);
                     relationshipDiagram.MetaType = "SysML1.4::Activity";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1543,7 +1537,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.BDD)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.logical);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.logical);
                     relationshipDiagram.MetaType = "SysML1.4::BlockDefinition";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1551,14 +1545,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.CLASS)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.classType);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.classType);
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.IBD)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::InternalBlock";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1566,14 +1560,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PACKAGE)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.package);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.package);
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PAR)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::Parametric";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1581,7 +1575,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.REQ)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.custom);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.custom);
                     relationshipDiagram.MetaType = "SysML1.4::Requirement";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1589,7 +1583,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.SEQ)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.sequence);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.sequence);
                     relationshipDiagram.MetaType = "SysML1.4::Sequence";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1597,7 +1591,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.STM)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.statechart);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.statechart);
                     relationshipDiagram.MetaType = "SysML1.4::StateMachine";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1605,7 +1599,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.UC)
                 {
-                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.useCase);
+                    relationshipDiagram = parentPkg.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.useCase);
                     relationshipDiagram.MetaType = "SysML1.4::UseCase";
                     relationshipDiagram.Update();
                     parentPkg.Diagrams.Refresh();
@@ -1617,7 +1611,7 @@ namespace MTIP.Translations
                 EA.Element parentElement = repository.GetElementByGuid(parentItem.GetEAID());
                 if (diagramItem.Value.GetElementType() == SysmlConstants.ACT && parentItem.GetEAID() != diagramConstants.activity)
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.activity);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.activity);
                     relationshipDiagram.MetaType = "SysML1.4::Activity";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1626,7 +1620,7 @@ namespace MTIP.Translations
 
                 if (diagramItem.Value.GetElementType() == SysmlConstants.BDD && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.logical);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.logical);
                     relationshipDiagram.MetaType = "SysML1.4::BlockDefinition";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1634,14 +1628,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.CLASS && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.classType);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.classType);
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.IBD && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::InternalBlock";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1649,14 +1643,14 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PACKAGE && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.package);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.package);
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
                     return relationshipDiagram;
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.PAR && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.compositeStructure);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.compositeStructure);
                     relationshipDiagram.MetaType = "SysML1.4::Parametric";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1664,7 +1658,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.REQ)
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.custom);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.custom);
                     relationshipDiagram.MetaType = "SysML1.4::Requirement";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1672,7 +1666,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.SEQ && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.sequence);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.sequence);
                     relationshipDiagram.MetaType = "SysML1.4::Sequence";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1680,7 +1674,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.STM && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.statechart);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.statechart);
                     relationshipDiagram.MetaType = "SysML1.4::StateMachine";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1688,7 +1682,7 @@ namespace MTIP.Translations
                 }
                 if (diagramItem.Value.GetElementType() == SysmlConstants.UC && parentItem.GetEAID() != "")
                 {
-                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.useCase);
+                    relationshipDiagram = parentElement.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.useCase);
                     relationshipDiagram.MetaType = "SysML1.4::UseCase";
                     relationshipDiagram.Update();
                     parentElement.Diagrams.Refresh();
@@ -1698,7 +1692,7 @@ namespace MTIP.Translations
             }
             else
             {
-                relationshipDiagram = orphanedPackage.Diagrams.AddNew(diagramItem.Value.GetAttribute(attributeConstants.name), diagramConstants.component);
+                relationshipDiagram = orphanedPackage.Diagrams.AddNew(diagramItem.Value.GetAttribute(AttributeConstants.NAME), diagramConstants.component);
                 relationshipDiagram.Update();
                 orphanedPackage.Diagrams.Refresh();
                 return relationshipDiagram;
