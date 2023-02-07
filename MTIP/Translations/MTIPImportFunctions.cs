@@ -176,7 +176,8 @@ namespace MTIP.Translations
                     //get ID associated with each model element (for now, EA GUID)
                     if (fieldNode.Name == attributeConstants.id)
                     {
-                        if (fieldNode.SelectSingleNode("ea") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("ea").InnerText);
+                        if (fieldNode.SelectSingleNode("unified") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("unified").InnerText);
+                        else if (fieldNode.SelectSingleNode("ea") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("ea").InnerText);
                         else if (fieldNode.SelectSingleNode("cameo") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("cameo").InnerText);
                         else if (fieldNode.SelectSingleNode("ontology") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("ontology").InnerText);
                         else if (fieldNode.SelectSingleNode("sysml") != null) modelElement.SetMappingID(dataNode.SelectSingleNode("id").SelectSingleNode("sysml").InnerText);
@@ -229,9 +230,9 @@ namespace MTIP.Translations
                     }
                     repository.Terms.Refresh();
                 }
-                foreach (string headCameoId in headModelElements)
+                foreach (string headElementID in headModelElements)
                 {
-                    XmlItem headModelItem = parsedXml[headCameoId];
+                    XmlItem headModelItem = parsedXml[headElementID];
                     string name;
                     if (headModelItem.GetName() == "")
                     {
@@ -239,7 +240,10 @@ namespace MTIP.Translations
                         headModelItem.AddAttribute(modelConstants.stereotype, modelConstants.model);
                     }
                     else name = headModelItem.GetName();
-                    EA.Package modelPkg = rootPkg.Packages.AddNew(name, "");
+                    //EA.Package modelPkg rootPkg.Packages.AddNew(name, "");= rootPkg.Packages.AddNew(name, "");
+                    EA.Package modelPkg = MTIPCommon.GetOrAddPackage(repository, rootPkg, headElementID,name);
+                    modelPkg.Name = name;
+                    //Repository.GetElementByID
                     modelPkg.Update();
 
                     if (headModelItem.GetAttributes().ContainsKey(modelConstants.stereotype) && headModelItem.GetAttribute(modelConstants.stereotype) == modelConstants.model)
@@ -262,13 +266,14 @@ namespace MTIP.Translations
                     modelPkg.Notes = notes;
                     modelPkg.Update();
 
-                    parsedXml[headCameoId].SetEAID(modelPkg.PackageGUID);
+                    parsedXml[headElementID].SetEAID(modelPkg.PackageGUID);
 
-                    GetChildren(headCameoId);
+                    GetChildren(headElementID);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 exportLog.Add("Could not build model. Please make sure there is at least one data element without hasParent relationship in the XML");
             }
         }
