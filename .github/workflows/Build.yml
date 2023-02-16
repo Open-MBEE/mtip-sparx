@@ -9,7 +9,7 @@ env:
   DisableOutOfProcPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\
 jobs:
   build:
-    runs-on: [self-hosted, pcs]
+    runs-on: [self-hosted, ea]
     timeout-minutes: 15
     
     steps:
