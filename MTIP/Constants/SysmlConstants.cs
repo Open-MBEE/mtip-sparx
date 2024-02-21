@@ -8,15 +8,9 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class SysmlConstants
+    public static class SysmlConstants
     {
         //Categorization constants
         public static string DIAGRAM = "Diagram";

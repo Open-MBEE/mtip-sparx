@@ -7,33 +7,17 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class InternalBlockConstants
+    public static class InternalBlockConstants
     {
-        public string boundary;
-        public string boundReference;
-        public string constraintProperty;
-        public string flowProperty;
-        public string participantProperty;
-        public string property;
-        public string referenceProperty;
-
-        public InternalBlockConstants()
-        {
-            boundary = "Boundary";
-            boundReference = "BoundReference";
-            constraintProperty = "ConstraintProperty";
-            flowProperty = "FlowProperty";
-            participantProperty = "ParticipantProperty";
-            property = "Property";
-            referenceProperty = "ReferenceProperty";
-        }
+        public const string BOUNDARY = "Boundary";
+        public const string BOUNDREFERENCE = "BoundReference";
+        public const string CONSTRAINTPROPERTY = "ConstraintProperty";
+        public const string FLOWPROPERTY = "FlowProperty";
+        public const string PARTICIPANTPROPERTY = "ParticipantProperty";
+        public const string PROPERTY = "Property";
+        public const string REFERENCEPROPERTY = "ReferenceProperty";
     }
 }
+

@@ -7,36 +7,18 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class StateMachineConstants
+    public static class StateMachineConstants
     {
-        public string deepHistory;
-        public string entryPoint;
-        public string exitPoint;
-        public string region;
-        public string shallowHistory;
-        public string state;
-        public string stateMachine;
-        public string stateNode;
-        public string synchronization;
-        public string trigger;
-        public StateMachineConstants()
-        {
-            entryPoint = "EntryPoint";
-            exitPoint = "ExitPoint";
-            region = "Region";
-            state = "State";
-            stateMachine = "StateMachine";
-            stateNode = "StateNode";
-            synchronization = "Synchronization";
-            trigger = "Trigger";
-        }
+        public const string ENTRYPOINT = "EntryPoint";
+        public const string EXITPOINT = "ExitPoint";
+        public const string REGION = "Region";
+        public const string STATE = "State";
+        public const string STATEMACHINE = "StateMachine";
+        public const string STATENODE = "StateNode";
+        public const string SYNCHRONIZATION = "Synchronization";
+        public const string TRIGGER = "Trigger";
     }
+
 }

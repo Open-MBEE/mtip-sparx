@@ -7,22 +7,13 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace MTIP.Constants
 {
-    public class UseCaseConstants
+
+    public static class UseCaseConstants
     {
-        public string actor;
-        public string useCase;
-        public UseCaseConstants()
-        {
-            actor = "Actor";
-            useCase = "UseCase";
-        }
+        public const string ACTOR = "Actor";
+        public const string USECASE = "UseCase";
     }
 }
+

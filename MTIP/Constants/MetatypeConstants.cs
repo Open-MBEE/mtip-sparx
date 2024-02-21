@@ -9,38 +9,23 @@
  * 
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MTIP.Constants
 {
-    public class MetatypeConstants
+
+    public static class MetatypeConstants
     {
-        public string acceptEventAction;
-        public string callBehaviorAction;
-        public string callOperationAction;
-        public string createObjectAction;
-        public string destroyObjectAction;
-        public string inputPin;
-        public string opaqueAction;
-        public string outputPin;
-        public string pseudostate;
-        public string sendSignalAction;
-        public MetatypeConstants()
-        {
-            acceptEventAction = "AcceptEventAction";
-            callBehaviorAction = "CallBehaviorAction";
-            callOperationAction = "CallOperationAction";
-            createObjectAction = "CreateObjectAction";
-            destroyObjectAction = "DestroyObjectAction";
-            inputPin = "InputPin";
-            opaqueAction = "OpaqueAction";
-            outputPin = "OutputPin";
-            pseudostate = "Pseudostate";
-            sendSignalAction = "SendSignalAction";
-        }
+        public const string acceptEventAction = "AcceptEventAction";
+        public const string callBehaviorAction = "CallBehaviorAction";
+        public const string callOperationAction = "CallOperationAction";
+        public const string createObjectAction = "CreateObjectAction";
+        public const string destroyObjectAction = "DestroyObjectAction";
+        public const string inputPin = "InputPin";
+        public const string opaqueAction = "OpaqueAction";
+        public const string outputPin = "OutputPin";
+        public const string pseudostate = "Pseudostate";
+        public const string sendSignalAction = "SendSignalAction";
     }
+
 }
