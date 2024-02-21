@@ -137,13 +137,9 @@ namespace MTIP.Translations
 
 
             // Get EA id for the package
-            XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
             string packageGuid = package.PackageGUID.Substring(1, package.PackageGUID.Length - 2);
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-            eaIdElement.InnerText = packageGuid;
-            idElement.AppendChild(eaIdElement);
+            
+            XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, packageGuid);
 
             // Create attributes element to add to data node
             XmlElement attributesElement = xmlDocument.CreateElement(attributeConstants.attributes);
@@ -252,15 +248,12 @@ namespace MTIP.Translations
             if (elementType == SysmlConstants.SYSMLOBJECT && element.ClassfierID != 0) elementType = SysmlConstants.SYSMLINSTANCESPECIFICATION;
             // Check if Initial Node is from Activity or State Machine
             if (elementType == SysmlConstants.SYSMLINITIALPSEUDOSTATE && parentType == SysmlConstants.SYSMLACTIVITY) elementType = SysmlConstants.SYSMLINITIALNODE;
-            
-            
+
+
             // Create id element to be added to data element
-            XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
             string elementGuid = element.ElementGUID.Substring(1, element.ElementGUID.Length - 2);
-            eaIdElement.InnerText = elementGuid;
+            XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, elementGuid);
+
             // Get element profiles and attributes
             if (element.PropertyType != 0)
             {
@@ -616,7 +609,7 @@ namespace MTIP.Translations
                 CheckElementSysMLCompliance(element, elementType, parentType);
 
                 // Add type, id, attributes, and relationships node to data node
-                idElement.AppendChild(eaIdElement);
+            
                 dataElement.AppendChild(typeElement);
                 dataElement.AppendChild(idElement);
                 dataElement.AppendChild(attributesElement);
@@ -650,12 +643,8 @@ namespace MTIP.Translations
             CheckDiagramSysMLCompliance(diagram, diagramType, parentType);
 
             // Create id element to be added to data element
-            XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-            eaIdElement.InnerText = diagramGuid;
-
+      
+            XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, diagramGuid);
             CreateHUDSAttribute(xmlDocument, attributeConstants.name, hudsConstants.str, diagram.Name, attributesElement);
 
             if (diagramType == SysmlConstants.SYSMLCLASS) CreateHUDSAttribute(xmlDocument, attributeConstants.displayAs, hudsConstants.str, "Diagram", attributesElement);
@@ -724,7 +713,7 @@ namespace MTIP.Translations
                             elementRelElement.AppendChild(diagramObjectElement);
                             key += 1;
                         }
-                        
+
                     }
                     catch
                     {
@@ -809,7 +798,6 @@ namespace MTIP.Translations
             hasParentElement.AppendChild(hasParentIdElement);
             relationshipsElement.AppendChild(hasParentElement);
 
-            idElement.AppendChild(eaIdElement);
             dataElement.AppendChild(typeElement);
             dataElement.AppendChild(idElement);
             dataElement.AppendChild(attributesElement);
@@ -858,11 +846,7 @@ namespace MTIP.Translations
                         typeElement.InnerText = connectorType;
 
                         // Create id element to be added to data element
-                        XmlElement idElement = xmlDocument.CreateElement(attributeConstants.id);
-                        idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
-                        XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-                        eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-                        eaIdElement.InnerText = connectorGuid;
+                        XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, connectorGuid);
                         if (connector.Name != "") CreateHUDSAttribute(xmlDocument, attributeConstants.name, hudsConstants.str, connector.Name, attributesElement);
                         if (connector.Stereotype != "")
                         {
@@ -960,7 +944,7 @@ namespace MTIP.Translations
                         hasParentElement.AppendChild(hasParentIdElement);
                         relationshipsElement.AppendChild(hasParentElement);
 
-                        idElement.AppendChild(eaIdElement);
+                        
                         dataElement.AppendChild(typeElement);
                         dataElement.AppendChild(idElement);
                         dataElement.AppendChild(attributesElement);
@@ -983,6 +967,8 @@ namespace MTIP.Translations
                 exportLog.Add("Could not add connector to XML: " + connector.Name + " - Connector GUID: " + connector.ConnectorGUID);
 
             }
+
+            
         }
 
         // Retuen package SysML type
@@ -1028,12 +1014,7 @@ namespace MTIP.Translations
             relationshipsElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
 
             // Create id element to be added to constraint data element
-            XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            idElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-            eaIdElement.InnerText = constraintGuid;
-
+            XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, constraintGuid);
             // Create constraint relationship
 
             XmlElement valueSpecificationElement = xmlDocument.CreateElement(relationshipConstants.valueSpecification);
@@ -1067,7 +1048,6 @@ namespace MTIP.Translations
             relationshipsElement.AppendChild(hasParentElement);
 
             // Add type, id, attributes, and relationships node to data node
-            idElement.AppendChild(eaIdElement);
             dataElement.AppendChild(typeElement);
             dataElement.AppendChild(idElement);
             dataElement.AppendChild(relationshipsElement);
@@ -1088,11 +1068,7 @@ namespace MTIP.Translations
 
 
             // Create id element to be added to opaque expression data element
-            XmlElement idElement = xmlDocument.CreateElement(hudsConstants.id);
-            relationshipsElement.SetAttribute(hudsConstants.dtype, hudsConstants.dict);
-            XmlElement eaIdElement = xmlDocument.CreateElement(hudsConstants.ea);
-            eaIdElement.SetAttribute(hudsConstants.dtype, hudsConstants.str);
-            eaIdElement.InnerText = opaqueGuid;
+            XmlElement idElement = MTIPCommon.CreateIdElement(xmlDocument, opaqueGuid);
 
             // Create opaque expression relationship
             XmlElement hasParentElement = xmlDocument.CreateElement(relationshipConstants.hasParent);
@@ -1114,7 +1090,6 @@ namespace MTIP.Translations
             CreateHUDSAttribute(xmlDocument, attributeConstants.body, hudsConstants.str, name, attributesElement);
 
             // Add type, id, attributes, and relationships node to data node
-            idElement.AppendChild(eaIdElement);
             dataElement.AppendChild(typeElement);
             dataElement.AppendChild(idElement);
             dataElement.AppendChild(attributesElement);

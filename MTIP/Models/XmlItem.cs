@@ -7,21 +7,18 @@
  * 
  */
 
+using MTIP.Constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using MTIP.Models;
-using MTIP.Constants;
 
 namespace MTIP.Models
 {
     public class XmlItem
     {
-        private string type;
+        private string type = string.Empty;
         private string category;
+        private string unified_id;
         private string ea_id;
         private string cameo_id;
         private string parent;
@@ -53,6 +50,7 @@ namespace MTIP.Models
         {
             this.type = "";
             this.category = "";
+            this.unified_id = "";
             this.ea_id = "";
             this.cameo_id = "";
             this.parent = "";
@@ -86,6 +84,12 @@ namespace MTIP.Models
             this.type = type;
             setCategory();
         }
+
+        public void SetUnifiedID(string unified_id)
+        {
+            this.unified_id = unified_id;
+        }
+
         public void SetEAID(string ea_id)
         {
             this.ea_id = ea_id;
