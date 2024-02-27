@@ -5,8 +5,8 @@
 name: Build MTIP.sln
 on: [push]
 env:
-  VisualStudioPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\devenv.exe
-  DisableOutOfProcPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\
+  VisualStudioPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\devenv.exe
+  DisableOutOfProcPath: C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\VSI\DisableOutOfProcBuild\
 jobs:
   build:
     runs-on: [self-hosted, ea]
@@ -30,11 +30,21 @@ jobs:
        run: .\DisableOutOfProcBuild.exe
 
     #wait 60 seconds as the devenv build is asyncronous
+    #sadly this is not really stable and will fail on the agent currently
      - name: Build Setup with Devenv
        run: |
-            &"${{env.VisualStudioPath}}" ".\MTIP.sln" /Build "Release|Any CPU" /out out2.log
-            Start-Sleep -Seconds 60
-            type out2.log 
+            $file = "out.log"
+            &"${{env.VisualStudioPath}}" ".\MTIPInstaller\MTIPInstaller.vdproj" /Build "Release|Any CPU" /out $file
+            Start-Sleep -Seconds 30
+            if ([System.IO.File]::Exists($file))
+            {
+              echo "Seems to have worked"
+              type $file
+            }
+            else 
+            {
+              echo "creating the setup on the agent failed"
+            }
 
      - name: Publish Binary Artifact
        uses: actions/upload-artifact@v3
