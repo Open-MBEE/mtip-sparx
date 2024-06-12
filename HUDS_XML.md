@@ -27,6 +27,7 @@ Each data tag is required to have the following child tags:
 ### id Tag
 
 The id tag should have the attribute _dtype="dict" and have at least one child tag naming the tool of origin with the string identifier as the value of the tag. If creating your own IDs it is recommended to use a universally unique identifier.
+The "unified" id should be populated by a UUID that is internal to the source tool! This is required to make roundtriping of the models possible.
 
 ### type Tag
 

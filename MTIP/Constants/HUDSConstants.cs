@@ -22,6 +22,7 @@ namespace MTIP.Constants
         public string dict;
         public string dtype;
         public string ea;
+        public string unified;
         public string element;
         public string id;
         public string intType;
@@ -43,6 +44,7 @@ namespace MTIP.Constants
             dict = "dict";
             dtype = "_dtype";
             ea = "ea";
+            unified = "unified";
             element = "element";
             id = "id";
             intType = "int";
