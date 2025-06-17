@@ -35,7 +35,10 @@ jobs:
        run: |
             $file = "out.log"
             &"${{env.VisualStudioPath}}" ".\MTIPInstaller\MTIPInstaller.vdproj" /Build "Release|Any CPU" /out $file
-            Start-Sleep -Seconds 60
+
+            #wait 90 is not brilliant but I am to lazy to build a loop.
+            
+            Start-Sleep -Seconds 90
             if ([System.IO.File]::Exists($file))
             {
               echo "Seems to have worked"
@@ -45,6 +48,13 @@ jobs:
             {
               echo "creating the setup on the agent failed"
             }
+
+            #if we don't find the msi fail the build step \MTIPInstaller\Release\*.msi
+            if (-not (Get-ChildItem -Path ".\MTIPInstaller\Release\*.msi" -ErrorAction SilentlyContinue)) {
+              Write-Error "No MSI file found in the Release directory."
+              exit 1
+            }
+            
 
      - name: Publish Binary Artifact
        uses: actions/upload-artifact@v4
